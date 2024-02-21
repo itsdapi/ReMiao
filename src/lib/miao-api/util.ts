@@ -32,15 +32,17 @@ export async function miaoApiCall(
   params?: {
     [key: string]: string;
   },
-  apiName?: string
+  apiName?: string,
+  overwriteToken?: string
 ) {
   const searchParams = new URLSearchParams(params);
-  const token = await getToken();
+  const token = overwriteToken ? overwriteToken : await getToken();
   const url = `${config.api.url}${path}?${searchParams.toString()}`;
   const headers = {
     Authorization: "Bearer " + token,
   };
   try {
+    // console.log(`miao api call, method: ${method}, url: ${url}`)
     return (await request(method, url, body, headers)) as any;
   } catch (error) {
     errorHandler(`${apiName ? apiName : ""}调用失败`, "toast");

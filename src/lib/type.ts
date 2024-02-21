@@ -14,7 +14,7 @@ export type Tab = {
 
 export type AppRuntime = {
   userData: LoginRespond;
-  fileUrl: string;
+  fileUrl: string | null;
 };
 
 export type RequestType = "POST" | "GET" | "PUT";

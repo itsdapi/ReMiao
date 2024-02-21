@@ -16,8 +16,6 @@ export default function Login() {
   });
 
   useEffect(() => {
-    if (!data) return;
-    writeRuntime(data);
     // if (isLogin) navigateTo({ url: config.app.indexPagePath });
     if (isLogin) switchTab({ url: config.app.indexPagePath });
   }, [isLogin]);

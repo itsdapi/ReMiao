@@ -23,6 +23,7 @@ export async function getStatusBarHeight() {
 }
 
 export async function writeRuntime(config: AppRuntime) {
+  console.log("writing runtime");
   const serialized = JSON.stringify(config);
   await setStorage({
     key: "runtime",
