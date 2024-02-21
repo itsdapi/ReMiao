@@ -1,22 +1,19 @@
-import { useState } from "react";
 import { routes } from "../lib/route";
 import SvgIcon from "./svg-icon";
-import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/lib/redux/store";
+import { changeActive } from "@/lib/redux/active-tab-slice";
 
 export default function NavBar() {
-  const [active, setActive] = useState<string>("0");
-
-  const handleTabChange = (value: string) => {
-    setActive(value);
-  };
+  const { active } = useSelector((state: RootState) => state.activeTab);
+  const dispatch = useDispatch<AppDispatch>();
 
   return (
     <div className="fixed bottom-0 h-20 w-full pt-3 border-t-2 border-gray-200 bg-gray-50 flex flex-row justify-around">
       {routes.map((item) => (
-        <NavLink
-          to={item.path}
+        <div
           className="flex flex-col items-center space-y-1"
-          onClick={() => handleTabChange(item.id)}
+          onClick={() => dispatch(changeActive(item.id))}
           key={item.id}
         >
           <SvgIcon
@@ -29,9 +26,9 @@ export default function NavBar() {
               active === item.id ? "text-primary-900" : "text-gray-500"
             }`}
           >
-            {item.title}
+            {item.name}
           </span>
-        </NavLink>
+        </div>
       ))}
     </div>
   );

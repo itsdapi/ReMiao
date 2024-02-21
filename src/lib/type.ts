@@ -1,7 +1,29 @@
+import { LoginRespond } from "@/lib/miao-api/type";
+
 export type Route = {
-    title: string,
-    path: string,
-    icon: string,
-    id: string,
-    element: JSX.Element
-}
+  text: string;
+  pagePath: string;
+};
+
+export type Tab = {
+  text: string;
+  id: number;
+  icon: string;
+  url: string;
+};
+
+export type AppRuntime = {
+  userData: LoginRespond;
+  fileUrl: string;
+};
+
+export type RequestType = "POST" | "GET" | "PUT";
+
+export type ErrorMessages = {
+  [statusCode: number]: string;
+};
+
+export type ErrorType = {
+  msg: string;
+  status: number;
+};

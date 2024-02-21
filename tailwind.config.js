@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const customTheme = require('./src/lib/theme')
 
 module.exports = {
   // 这里给出了一份 taro 通用示例，具体要根据你自己项目的目录结构进行配置
@@ -15,10 +16,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: {
-          900: '#FACC89',
-          800: '#E8BEA5'
-        }
+        primary: customTheme.colors.primary
       }
     },
   },

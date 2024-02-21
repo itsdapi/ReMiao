@@ -1,10 +1,12 @@
 export default function SvgIcon({
   src,
   className,
+  color,
   size = 40,
 }: {
   src: string;
   className?: string;
+  color?: string;
   size: number;
 }) {
   return (
@@ -23,6 +25,7 @@ export default function SvgIcon({
           maskSize: "cover",
           WebkitMaskSize: "cover",
           WebkitMaskRepeat: "no-repeat",
+          backgroundColor: color,
         }}
       />
     </div>

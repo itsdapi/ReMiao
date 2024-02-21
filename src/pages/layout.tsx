@@ -6,8 +6,7 @@ import { routes } from "@/lib/route";
 import { getStatusBarHeight } from "@/lib/util";
 import { useState } from "react";
 
-export default function Index() {
-  const Element = useRoutes(routes);
+export default function Layout() {
   const [statusBarHeight, setStatusBarHeight] = useState<number>(0);
   useLoad(async () => {
     console.log("Page loaded.");
@@ -15,7 +14,9 @@ export default function Index() {
   });
   return (
     <div style={{ paddingTop: statusBarHeight + 10 }}>
-      <div className={"container mx-3"}>{Element}</div>
+      <div className={"container mx-auto"}>
+        <div className={"mx-3"}>{Element}</div>
+      </div>
       <NavBar />
     </div>
   );
