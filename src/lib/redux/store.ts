@@ -1,11 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { reducer as catListReducer } from "./cat-list-slice";
 import { reducer as loginReducer } from "./login-slice";
 import { reducer as activeTabReducer } from "./active-tab-slice";
 
 export const store = configureStore({
   reducer: {
-    catList: catListReducer,
     login: loginReducer,
     activeTab: activeTabReducer,
   },

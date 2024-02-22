@@ -2,7 +2,7 @@ import { config } from "@/lib/config";
 import { actionFetchLoginData } from "@/lib/redux/login-slice";
 import { AppDispatch, RootState } from "@/lib/redux/store";
 import { writeRuntime } from "@/lib/util";
-import CenterLayout from "@/ui/center-layout";
+import { CenterLayout } from "@/ui/layout";
 import { useLoad, navigateTo, switchTab } from "@tarojs/taro";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";

@@ -1,22 +1,21 @@
 import { config } from "@/lib/config";
-import { actionFetchCatList } from "@/lib/redux/cat-list-slice";
-import { AppDispatch, RootState } from "@/lib/redux/store";
+import { getCatList } from "@/lib/miao-api/cat";
+import { CatList } from "@/lib/miao-api/type";
+import { RootState } from "@/lib/redux/store";
 // import { getLocalFileUrl } from "@/lib/util";
 import { CardXL } from "@/ui/cards";
 import { IndexLayout } from "@/ui/layout";
-import Title from "@/ui/title";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function Index() {
-  const { data } = useSelector((state: RootState) => state.catList);
+  const [data, setData] = useState<CatList[] | null>(null);
   const fileUrl = useSelector((state: RootState) => state.login.data?.fileUrl);
-
-  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    // console.log("catList", data);
-    if (data) return;
-    dispatch(actionFetchCatList());
+    const fetchData = async () => {
+      setData(await getCatList());
+    };
+    fetchData();
   }, []);
 
   return (

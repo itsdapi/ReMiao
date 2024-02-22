@@ -2,9 +2,11 @@ import { RootState } from "@/lib/redux/store";
 import { AppRuntime, RequestType } from "@/lib/type";
 import {
   getSystemInfo,
+  createIntersectionObserver,
   getMenuButtonBoundingClientRect,
   setStorage,
   getStorage,
+  IntersectionObserver,
   navigateTo,
   showToast as TaroShowToast,
   login as TaroLogin,
@@ -99,4 +101,21 @@ export function errorHandler(errMsg: string, type: "toast" | "page") {
   } else if (type === "toast") {
     showToast(errMsg, "error");
   }
+}
+
+export function initIntersectObserver(
+  component: any,
+  intersectTargetSelector: string,
+  observeTargetSelector: string,
+  setStateFn: React.Dispatch<React.SetStateAction<boolean>>
+) {
+  const observer = createIntersectionObserver(component, {
+    thresholds: [0, 1],
+  });
+  observer
+    .relativeTo(intersectTargetSelector)
+    .observe(observeTargetSelector, (res) => {
+      // console.log("intersect!", res);
+      setStateFn(res.intersectionRatio > 0);
+    });
 }

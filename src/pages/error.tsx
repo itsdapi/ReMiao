@@ -1,4 +1,4 @@
-import CenterLayout from "@/ui/center-layout";
+import { CenterLayout } from "@/ui/layout";
 import { getCurrentInstance } from "@tarojs/runtime";
 
 type params = {
