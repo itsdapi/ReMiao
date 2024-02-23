@@ -1,6 +1,6 @@
 export const config = {
   api: {
-    url: "https://api.test.kitty.xqe2011.cn",
+    url: "https://api.release.kitty.xqe2011.cn",
   },
   app: {
     indexPagePath: "tabs-pages/index",

@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.glass {
+  backdrop-filter: blur(30px) brightness(90%) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) brightness(90%) saturate(180%);
+  background-color: rgba(255, 255, 255, 0.0274509804);
+}
+
+.white-glass {
+  background-color: #f5f4eec4;
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+}

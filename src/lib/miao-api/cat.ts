@@ -2,8 +2,7 @@ import { CatList } from "@/lib/miao-api/type";
 import { miaoApiCall } from "@/lib/miao-api/util";
 
 export async function getCatList(limit = 20, offset = 0) {
-  console.log("fetching cat list");
-  return (await miaoApiCall(
+  const result = (await miaoApiCall(
     "/cats",
     "GET",
     null,
@@ -13,4 +12,6 @@ export async function getCatList(limit = 20, offset = 0) {
     },
     "猫列表"
   )) as CatList[];
+  console.log(`fetch ${result.length} cats (^^ )`);
+  return result;
 }

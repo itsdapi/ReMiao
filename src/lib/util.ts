@@ -1,4 +1,3 @@
-import { RootState } from "@/lib/redux/store";
 import { AppRuntime, RequestType } from "@/lib/type";
 import {
   getSystemInfo,
@@ -6,13 +5,11 @@ import {
   getMenuButtonBoundingClientRect,
   setStorage,
   getStorage,
-  IntersectionObserver,
   navigateTo,
   showToast as TaroShowToast,
   login as TaroLogin,
   request as TaroRequest,
 } from "@tarojs/taro";
-import { useSelector } from "react-redux";
 
 /**
  *

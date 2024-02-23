@@ -17,6 +17,9 @@ module.exports = {
     extend: {
       colors: {
         primary: customTheme.colors.primary
+      },
+      transitionProperty: {
+        'fadeGlass': 'backgound-color backdrop-filter -webkit-backdrop-filter'
       }
     },
   },

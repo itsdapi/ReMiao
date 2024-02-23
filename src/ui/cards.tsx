@@ -4,13 +4,15 @@ export function CardXL({
   title,
   src,
   desc,
+  className,
 }: {
   title?: string;
   src?: string;
   desc?: string;
+  className?: string;
 }) {
   return (
-    <div className={"bg-red-300"}>
+    <div className={`bg-red-300 ${className}}`}>
       <Image
         src={src}
         ariaLabel={title ? title : "空图片"}
