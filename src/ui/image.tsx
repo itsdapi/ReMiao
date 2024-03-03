@@ -11,7 +11,9 @@ const Image = React.memo(
     className,
     height,
     width,
+    children
   }: {
+    children?: React.ReactNode
     ariaLabel: string;
     src?: string;
     mode?: keyof ImageProps.Mode;
@@ -32,7 +34,9 @@ const Image = React.memo(
         onLoad={() => {
           setLoaded(true);
         }}
-      />
+      >
+        {children}
+      </TaroImage>
     );
 
     return img;

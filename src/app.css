@@ -13,3 +13,10 @@
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
 }
+
+::-webkit-scrollbar{
+  width:0;
+  height:0;
+  color:transparent;
+  display:none
+}

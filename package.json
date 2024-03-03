@@ -67,8 +67,7 @@
     "redux": "^5.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^3.1.0",
-    "taro-ui": "^3.3.0",
-    "taro-virtual-list": "^1.1.2"
+    "taro-ui": "^3.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.0",
@@ -85,7 +84,7 @@
     "@typescript-eslint/parser": "^6.2.0",
     "autoprefixer": "^10.4.17",
     "babel-preset-taro": "3.6.23",
-    "eslint": "^8.12.0",
+    "eslint": "^8.57.0",
     "eslint-config-taro": "3.6.23",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-react": "^7.8.2",

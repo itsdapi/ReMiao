@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { changeActive } from "@/lib/redux/active-tab-slice";
 import { Tab } from "@/lib/type";
 import { config } from "@/lib/config";
+import "./index.css"
 
 export default function Tabbar() {
   const { active } = useSelector((state: RootState) => state.activeTab);
@@ -43,6 +44,7 @@ export default function Tabbar() {
 
   return (
     <div
+      className={'white-glass'}
       style={{
         display: "flex",
         paddingTop: "0.75rem",
@@ -52,7 +54,6 @@ export default function Tabbar() {
         borderColor: "#E5E7EB",
         width: "100%",
         height: `${config.app.tabbarHeight}rem`,
-        backgroundColor: "#F9FAFB",
       }}
     >
       {tabs.map((item) => (

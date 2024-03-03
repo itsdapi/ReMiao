@@ -1,0 +1,5 @@
+.white-glass {
+  background-color: #f5f4eec4;
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+}

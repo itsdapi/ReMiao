@@ -27,3 +27,8 @@ export type ErrorType = {
   msg: string;
   status: number;
 };
+
+export type Tag = {
+  id: string,
+  name: string
+}
