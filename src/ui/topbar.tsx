@@ -13,7 +13,7 @@ export default function TopbarProvider({
 }: {
   children: React.ReactNode;
   title?: string;
-  observeTargetSelector: string;
+  observeTargetSelector?: string;
   back?: boolean;
 }) {
   const [blockBarShow, setBlockBarShow] = useState<boolean>(false);
@@ -27,11 +27,17 @@ export default function TopbarProvider({
     const getSafeHeight = async () => {
       const result = await getStatusBarHeight();
       setHeight(result);
-      console.log("topbar", result);
+      // console.log("topbar", result);
     };
 
     getSafeHeight();
-    initIntersectObserver(this, "#top", observeTargetSelector, setBlockBarShow);
+    observeTargetSelector &&
+      initIntersectObserver(
+        this,
+        "#top",
+        observeTargetSelector,
+        setBlockBarShow
+      );
   }, []);
 
   const handleBackClick = () => {

@@ -1,8 +1,13 @@
 import { useEffect } from "react";
+import TopbarProvider from "@/ui/topbar";
+import PaddingBlock from "@/ui/padding-block";
 
 export default function About() {
-  useEffect(() => {
-    console.log("About show");
-  }, []);
-  return <div>About Page</div>;
+  useEffect(() => {}, []);
+  return (
+    <TopbarProvider>
+      <PaddingBlock />
+      <div>about page</div>
+    </TopbarProvider>
+  );
 }

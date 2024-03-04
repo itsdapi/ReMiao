@@ -3,8 +3,8 @@ import {
   getSystemInfo,
   createIntersectionObserver,
   getMenuButtonBoundingClientRect,
-  setStorage,
-  getStorage,
+  setStorageSync,
+  getStorageSync,
   navigateTo,
   showToast as TaroShowToast,
   login as TaroLogin,
@@ -29,30 +29,23 @@ export async function getStatusBarHeight(): Promise<TopHeightReturnType> {
 export async function writeRuntime(config: AppRuntime) {
   console.log("writing runtime");
   const serialized = JSON.stringify(config);
-  await setStorage({
-    key: "runtime",
-    data: serialized,
-  });
+  setStorageSync("runtime", serialized);
   console.log("Runtime saved!");
 }
 
 export async function getRuntime() {
-  const serialized = (await getStorage({ key: "runtime" })).data;
-  if (serialized !== undefined) {
-    try {
-      // console.log(`Object ${key} retrieved successfully`);
-      return JSON.parse(serialized) as AppRuntime;
-    } catch (e) {
-      console.error("Error parsing JSON:", e);
-      throw e;
+  try {
+    const serialized = await getStorageSync("runtime");
+    if (!serialized) {
+      console.log("Runtime retrieved failed!");
+      return undefined;
     }
-  } else {
-    throw new Error("Runtime config not found.");
+    // console.log(`Runtime retrieved successfully`, serialized);
+    return JSON.parse(serialized) as AppRuntime;
+  } catch (e) {
+    console.error("Error parsing JSON:", e);
+    throw e;
   }
-}
-
-export async function getToken() {
-  return (await getRuntime()).userData.token;
 }
 
 export async function login() {

@@ -1,4 +1,3 @@
-import { loginSlice } from "@/lib/redux/login-slice";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface activeTabState {

@@ -17,11 +17,7 @@ export default function CatDetail() {
   }, []);
 
   return (
-    <TopbarProvider
-      observeTargetSelector={"content"}
-      title={catID?.toString()}
-      back
-    >
+    <TopbarProvider title={catID?.toString()} back>
       <div>
         <PaddingBlock />
         catid {catID}

@@ -1,15 +1,14 @@
 import { config } from "@/lib/config";
 import { actionFetchLoginData } from "@/lib/redux/login-slice";
 import { AppDispatch, RootState } from "@/lib/redux/store";
-import { writeRuntime } from "@/lib/util";
 import { CenterLayout } from "@/ui/layout";
-import { useLoad, navigateTo, switchTab } from "@tarojs/taro";
+import { useLoad, switchTab } from "@tarojs/taro";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>();
-  const { isLogin, data } = useSelector((state: RootState) => state.login);
+  const { isLogin } = useSelector((state: RootState) => state.login);
 
   useLoad(async () => {
     dispatch(actionFetchLoginData());

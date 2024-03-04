@@ -11,7 +11,7 @@ export default defineAppConfig({
   //   },
   // },
   pages: [
-    "pages/login",
+    // "pages/login",
     "pages/tabs-pages/index",
     "pages/tabs-pages/article",
     "pages/tabs-pages/about",
