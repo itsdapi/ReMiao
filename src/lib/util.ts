@@ -1,4 +1,4 @@
-import { AppRuntime, RequestType } from "@/lib/type";
+import { AppRuntime, RequestType, TopHeightReturnType } from "@/lib/type";
 import {
   getSystemInfo,
   createIntersectionObserver,
@@ -15,10 +15,15 @@ import {
  *
  * @returns 返回从顶上直到按钮的高度（非遮挡高度）
  */
-export async function getStatusBarHeight() {
-  const value = (await getSystemInfo()).statusBarHeight;
-  const memuHeight = getMenuButtonBoundingClientRect().height;
-  return value ? value + memuHeight : 0;
+export async function getStatusBarHeight(): Promise<TopHeightReturnType> {
+  let statusBarHeight = (await getSystemInfo()).statusBarHeight;
+  const menu = getMenuButtonBoundingClientRect();
+  if (!statusBarHeight) statusBarHeight = 0;
+  return {
+    full: statusBarHeight + menu.height + 13,
+    menu: menu.top + menu.height / 2,
+    statusbar: statusBarHeight,
+  };
 }
 
 export async function writeRuntime(config: AppRuntime) {

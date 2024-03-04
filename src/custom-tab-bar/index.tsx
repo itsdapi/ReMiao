@@ -1,7 +1,7 @@
 import SvgIcon from "@/ui/svg-icon";
-import catIcon from "@/public/icon/cat.svg";
+import indexIcon from "@/public/icon/index.svg";
 import articleIcon from "@/public/icon/article.svg";
-import dragonIcon from "@/public/icon/dragon.svg";
+import aboutIcon from "@/public/icon/about.svg";
 import { switchTab } from "@tarojs/taro";
 // @ts-ignore
 import theme from "@/lib/theme";
@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { changeActive } from "@/lib/redux/active-tab-slice";
 import { Tab } from "@/lib/type";
 import { config } from "@/lib/config";
-import "./index.css"
+import "./index.css";
 
 export default function Tabbar() {
   const { active } = useSelector((state: RootState) => state.activeTab);
@@ -25,7 +25,7 @@ export default function Tabbar() {
     {
       text: "图鉴",
       url: "index",
-      icon: catIcon,
+      icon: indexIcon,
       id: 0,
     },
     {
@@ -37,21 +37,20 @@ export default function Tabbar() {
     {
       text: "关于",
       url: "about",
-      icon: dragonIcon,
+      icon: aboutIcon,
       id: 2,
     },
   ];
 
   return (
     <div
-      className={'white-glass'}
+      className={"white-glass"}
       style={{
         display: "flex",
         paddingTop: "0.75rem",
         flexDirection: "row",
         justifyContent: "space-around",
-        borderTopWidth: "2px",
-        borderColor: "#E5E7EB",
+        borderTop: "solid 1px #E5E7EB",
         width: "100%",
         height: `${config.app.tabbarHeight}rem`,
       }}
@@ -60,7 +59,7 @@ export default function Tabbar() {
         <div
           style={{
             display: "flex",
-            marginTop: "0.25rem",
+            // marginTop: "0.25rem",
             flexDirection: "column",
             alignItems: "center",
           }}
@@ -69,16 +68,18 @@ export default function Tabbar() {
         >
           <SvgIcon
             src={item.icon}
-            size={20}
+            size={30}
             color={active === item.id ? primaryColor[900] : "#6B7280"}
           />
-          <span
-            style={{
-              color: active === item.id ? primaryColor[900] : "#6B7280",
-            }}
-          >
-            {item.text}
-          </span>
+          {/*<span*/}
+          {/*  style={{*/}
+          {/*    paddingTop: "0.2rem",*/}
+          {/*    fontSize: "0.8rem",*/}
+          {/*    color: active === item.id ? primaryColor[900] : "#6B7280",*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  {item.text}*/}
+          {/*</span>*/}
         </div>
       ))}
     </div>

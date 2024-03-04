@@ -29,6 +29,12 @@ export type ErrorType = {
 };
 
 export type Tag = {
-  id: string,
-  name: string
-}
+  id: string;
+  name: string;
+};
+
+export type TopHeightReturnType = {
+  menu: number;
+  statusbar: number;
+  full: number;
+};

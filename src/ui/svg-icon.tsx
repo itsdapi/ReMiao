@@ -1,33 +1,28 @@
-export default function SvgIcon({
-  src,
-  className,
-  color,
-  size = 40,
-}: {
+import { View, ViewProps } from "@tarojs/components";
+
+interface SvgIconProps extends ViewProps {
   src: string;
-  className?: string;
-  color?: string;
+  color: string;
   size: number;
-}) {
+}
+
+export default function SvgIcon(props: SvgIconProps) {
   return (
-    <div>
-      <div
-        className={className}
+    <View {...props}>
+      <View
         style={{
-          maskImage: "url(" + src + ")",
+          mask: "url(" + props.src + ") no-repeat",
           // React官方推荐的WebkitMaskImage写法无法正确编译 故用字符串形式书写
           // https://github.com/NervJS/taro/issues/9198
           // @ts-ignore
-          "-webkit-mask-image": "url(" + src + ")",
-          height: size,
-          width: size,
-          maskRepeat: "no-repeat",
+          "-webkit-mask": "url(" + props.src + ") no-repeat",
           maskSize: "cover",
-          WebkitMaskSize: "cover",
-          WebkitMaskRepeat: "no-repeat",
-          backgroundColor: color,
+          "-webkit-mask-size": "cover",
+          height: props.size,
+          width: props.size,
+          backgroundColor: props.color,
         }}
       />
-    </div>
+    </View>
   );
 }
