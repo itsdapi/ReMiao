@@ -1,7 +1,7 @@
 import { config } from "@/lib/config";
 import { LoginRespond } from "@/lib/miao-api/type";
 import { MIAO_API_LOGIN_PATH } from "@/lib/static";
-import { RequestType } from "@/lib/type";
+import { RequestError, RequestType } from "@/lib/type";
 import { errorHandler, getRuntime, login, request } from "@/lib/util";
 import { store } from "@/lib/redux/store";
 import {
@@ -29,6 +29,7 @@ export async function miaoTokenCall() {
  * @param params 请求url参数
  * @param apiName api名字 3个字
  * @param overwriteToken 覆盖获取token的方式 用于未登陆的时候直接调用
+ * @param times 重试次数 修改本函数的默认值来调整重试次数
  * @returns
  */
 export async function miaoApiCall(
@@ -39,7 +40,8 @@ export async function miaoApiCall(
     [key: string]: string;
   },
   apiName?: string,
-  overwriteToken?: string
+  overwriteToken?: string,
+  times = 1
 ) {
   // await miaoLogin();
   const searchParams = new URLSearchParams(params);
@@ -50,15 +52,36 @@ export async function miaoApiCall(
   };
   // console.log(`token ${apiName}`, token);
   try {
-    // console.log(`miao api call, method: ${method}, url: ${url}`);
+    // console.log(
+    //   `miao api call, method: ${method}, url: ${url}, header: ${headers.toString()}`
+    // );
     return (await request(method, url, body, headers)) as any;
   } catch (error) {
+    if (error instanceof RequestError) {
+      if (error.status === 401 && times > 0) {
+        console.log(`Request retry at ${times}`);
+        return await miaoApiCall(
+          path,
+          method,
+          body,
+          params,
+          apiName,
+          await getToken(true),
+          times - 1
+        );
+      }
+    }
     errorHandler(`${apiName ? apiName : ""}调用失败`, "toast");
     throw error;
   }
 }
 
-async function getToken() {
+async function getToken(isNew?: boolean) {
+  if (isNew) {
+    console.log("Requesting a new Token");
+    await store.dispatch(actionFetchLoginData());
+  }
+
   // 首先会尝试从Redux中获取运行时
   let reduxRuntime = store.getState().login.data;
   // console.log("reduxRuntime", reduxRuntime);
@@ -70,11 +93,10 @@ async function getToken() {
       // 如果localStorage也是空的话 就是第一次登陆 需要执行miaoLogin()
       // 这一步会把运行时写入localStorage和Redux login state
       await store.dispatch(actionFetchLoginData());
-      reduxRuntime = store.getState().login.data;
     } else {
       await store.dispatch(actionLoadLoginData());
-      reduxRuntime = store.getState().login.data;
     }
+    reduxRuntime = store.getState().login.data;
   }
   // console.log("return redux runtime", reduxRuntime);
   if (!reduxRuntime) {

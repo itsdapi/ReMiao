@@ -15,6 +15,7 @@ export default defineAppConfig({
     "pages/tabs-pages/index",
     "pages/tabs-pages/article",
     "pages/tabs-pages/about",
+    "pages/tabs-pages/search",
     "pages/error",
     "pages/none-tabs-pages/cat-detail",
     "pages/none-tabs-pages/article-detail",

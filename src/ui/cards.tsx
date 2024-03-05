@@ -70,3 +70,23 @@ export function Notification({
     </div>
   );
 }
+
+interface PortraitCardProps
+  extends React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLDivElement>,
+    HTMLDivElement
+  > {
+  src: string;
+  ariaLabel: string;
+}
+export function PortraitCard(props: PortraitCardProps) {
+  return (
+    <div {...props}>
+      <Image
+        ariaLabel={props.ariaLabel}
+        src={props.src}
+        className={"rounded-2xl aspect-portrait w-36"}
+      />
+    </div>
+  );
+}

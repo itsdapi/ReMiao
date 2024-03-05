@@ -11,7 +11,7 @@ import VirtialList from "@/ui/virtual-list";
 import TagSelector from "@/ui/tag-selector";
 import { Tag } from "@/lib/type";
 import { navigateTo } from "@tarojs/taro";
-import PaddingBlock from "@/ui/padding-block";
+import { PaddingBottom, PaddingTop } from "@/ui/padding-top";
 
 export default function Index() {
   const fileUrl = useSelector((state: RootState) => state.login.data?.fileUrl);
@@ -39,8 +39,8 @@ export default function Index() {
   const topElement = () => {
     return (
       <>
-        <PaddingBlock />
-        <div className={"space-y-2 mb-2"}>
+        <PaddingTop />
+        <div className={"space-y-3 mb-3"}>
           <Notification
             setShowFn={setNotifShow}
             isShow={NotifShow}
@@ -55,12 +55,7 @@ export default function Index() {
   };
 
   const bottomElement = () => {
-    return (
-      <div
-        style={{ height: `${config.app.tabbarHeight + 2}rem` }}
-        className={"w-full"}
-      />
-    );
+    return <PaddingBottom />;
   };
 
   const handleScrollToLower = async () => {
@@ -71,9 +66,9 @@ export default function Index() {
     setPageNum(pageNum + 1);
   };
 
-  const handleCatClick = (catID: number) => {
+  const handleCatClick = (id: number) => {
     navigateTo({
-      url: `${config.app.catDetailPath}?catID=${catID}`,
+      url: `${config.app.catDetailPath}?id=${id}`,
     });
   };
 

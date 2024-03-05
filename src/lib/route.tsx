@@ -13,4 +13,8 @@ export const routes: Route[] = [
     text: "关于",
     pagePath: "pages/tabs-pages/about",
   },
+  {
+    text: "搜索",
+    pagePath: "pages/tabs-pages/search",
+  },
 ];

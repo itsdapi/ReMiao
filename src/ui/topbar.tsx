@@ -10,11 +10,15 @@ export default function TopbarProvider({
   observeTargetSelector,
   title,
   back,
+  heightOffset,
+  defaultHidden = false,
 }: {
   children: React.ReactNode;
   title?: string;
   observeTargetSelector?: string;
   back?: boolean;
+  heightOffset?: number;
+  defaultHidden?: boolean;
 }) {
   const [blockBarShow, setBlockBarShow] = useState<boolean>(false);
   const [height, setHeight] = useState<TopHeightReturnType>({
@@ -25,11 +29,11 @@ export default function TopbarProvider({
 
   useEffect(() => {
     const getSafeHeight = async () => {
-      const result = await getStatusBarHeight();
+      let result = await getStatusBarHeight();
+      result.full += heightOffset ? heightOffset : 0;
       setHeight(result);
       // console.log("topbar", result);
     };
-
     getSafeHeight();
     observeTargetSelector &&
       initIntersectObserver(
@@ -46,24 +50,32 @@ export default function TopbarProvider({
 
   return (
     <>
+      {/*<div*/}
+      {/*  id={"top"}*/}
+      {/*  className={"fixed w-full z-40"}*/}
+      {/*  style={{ height: height.full }}*/}
+      {/*/>*/}
       <div
         id={"top"}
         style={{ height: height.full }}
         className={`w-full top-0 fixed z-40
         transition-fadeGlass duration-500
-        ${blockBarShow ? "white-glass" : "bg-white"}}`}
+        ${defaultHidden ? "opacity-0" : "opacity-100"}
+        ${blockBarShow ? "white-glass opacity-100" : "bg-white"}`}
       >
         <div
           className={"absolute w-full"}
           style={{ top: `${height.menu + 11}px` }}
         >
-          <SvgIcon
-            src={BackIcon}
-            size={18}
-            color={"black"}
-            className={`absolute bottom-0 left-4 ${back ? "block" : "hidden"}`}
-            onClick={handleBackClick}
-          />
+          {back && (
+            <SvgIcon
+              src={BackIcon}
+              size={18}
+              color={"black"}
+              className={`absolute bottom-0 left-4`}
+              onClick={handleBackClick}
+            />
+          )}
           <h1
             className={`w-fit mx-auto absolute bottom-0 inset-x-0 text-center transition-opacity duration-200 font-medium ${
               blockBarShow ? "opacity-100" : "opacity-0"

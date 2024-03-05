@@ -1,4 +1,9 @@
-import { AppRuntime, RequestType, TopHeightReturnType } from "@/lib/type";
+import {
+  AppRuntime,
+  RequestError,
+  RequestType,
+  TopHeightReturnType,
+} from "@/lib/type";
 import {
   getSystemInfo,
   createIntersectionObserver,
@@ -10,6 +15,7 @@ import {
   login as TaroLogin,
   request as TaroRequest,
 } from "@tarojs/taro";
+import { RespondErrorType } from "@/lib/miao-api/type";
 
 /**
  *
@@ -68,7 +74,8 @@ export async function request(
         if (result.statusCode >= 200 && result.statusCode < 300) {
           res(result.data);
         } else {
-          rej(result.data);
+          const error = result.data as RespondErrorType;
+          rej(new RequestError(error.msg, error.status));
         }
       },
       fail: (error) => {
@@ -113,4 +120,8 @@ export function initIntersectObserver(
       // console.log("intersect!", res);
       setStateFn(res.intersectionRatio > 0);
     });
+}
+
+export function isBlank(str: string) {
+  return str.trim() === "";
 }

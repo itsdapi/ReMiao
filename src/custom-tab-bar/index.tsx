@@ -2,6 +2,7 @@ import SvgIcon from "@/ui/svg-icon";
 import indexIcon from "@/public/icon/index.svg";
 import articleIcon from "@/public/icon/article.svg";
 import aboutIcon from "@/public/icon/about.svg";
+import searchIcon from "@/public/icon/search.svg";
 import { switchTab } from "@tarojs/taro";
 // @ts-ignore
 import theme from "@/lib/theme";
@@ -39,6 +40,12 @@ export default function Tabbar() {
       url: "about",
       icon: aboutIcon,
       id: 2,
+    },
+    {
+      text: "搜索",
+      url: "search",
+      icon: searchIcon,
+      id: 3,
     },
   ];
 

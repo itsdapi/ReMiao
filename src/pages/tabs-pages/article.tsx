@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import TopbarProvider from "@/ui/topbar";
-import PaddingBlock from "@/ui/padding-block";
+import { PaddingTop } from "@/ui/padding-top";
 
 export default function Article() {
   useEffect(() => {}, []);
   return (
     <TopbarProvider observeTargetSelector={""}>
-      <PaddingBlock />
+      <PaddingTop />
       <div>article page</div>
     </TopbarProvider>
   );
