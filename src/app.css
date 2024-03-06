@@ -9,7 +9,7 @@
 }
 
 .white-glass {
-  background-color: rgba(255,255,255,0.88);
+  background-color: rgba(245,244,239,0.88);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
 }

@@ -48,3 +48,5 @@ export class RequestError extends Error {
     this.status = status;
   }
 }
+
+export type NotificationConfig = Number[];

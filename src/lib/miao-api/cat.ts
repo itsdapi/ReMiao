@@ -41,6 +41,6 @@ export async function searchCat(term: string, limit = 20, offset = 0) {
     },
     "搜索"
   )) as SearchResult[];
-  console.log(`Get ${result.length} search result :)`);
+  console.log(`Get ${result.length} search result (.V.)`);
   return result;
 }

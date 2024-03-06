@@ -30,5 +30,6 @@ export default defineAppConfig({
     navigationBarTitleText: config.app.title,
     navigationBarTextStyle: "black",
     navigationStyle: "custom",
+    backgroundColor: config.app.colors.primary[100],
   },
 });

@@ -1,5 +1,6 @@
 import {
   AppRuntime,
+  NotificationConfig,
   RequestError,
   RequestType,
   TopHeightReturnType,
@@ -124,4 +125,38 @@ export function initIntersectObserver(
 
 export function isBlank(str: string) {
   return str.trim() === "";
+}
+
+export async function isShowNotification(id: number) {
+  const config = await getUserNotificationConfig();
+  return !config.includes(id);
+}
+
+export async function userReadNotification(id: number) {
+  try {
+    let config = await getUserNotificationConfig();
+    config.push(id);
+    setStorageSync("notification", config);
+  } catch (e) {
+    errorHandler("写公告配置失败", "toast");
+    console.error("Write user notification config fail!");
+  }
+}
+
+export async function getUserNotificationConfig() {
+  try {
+    const config = getStorageSync("notification");
+    if (!config) {
+      console.log("Local notification storage not exist, creating");
+      setStorageSync("notification", []);
+      return [] as NotificationConfig;
+    }
+    return config as NotificationConfig;
+  } catch (e) {
+    throw new Error("Get Notification Config Fail!");
+  }
+}
+
+export function getEnvMode() {
+  return process.env.NODE_ENV;
 }

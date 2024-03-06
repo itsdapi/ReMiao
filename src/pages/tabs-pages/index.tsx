@@ -11,7 +11,8 @@ import VirtialList from "@/ui/virtual-list";
 import TagSelector from "@/ui/tag-selector";
 import { Tag } from "@/lib/type";
 import { navigateTo } from "@tarojs/taro";
-import { PaddingBottom, PaddingTop } from "@/ui/padding-top";
+import { PaddingBottom, PaddingBlock } from "@/ui/padding-block";
+import { isShowNotification } from "@/lib/util";
 
 export default function Index() {
   const fileUrl = useSelector((state: RootState) => state.login.data?.fileUrl);
@@ -23,29 +24,43 @@ export default function Index() {
     const initData = async () => {
       setData(await getCatList(batchCount, 0));
     };
+
+    const notificationShouldPop = async () => {
+      setNotifShow(await isShowNotification(notification.id));
+    };
+
     initData();
+    notificationShouldPop();
+    // eslint-disable-next-line
   }, []);
 
+  const notification = {
+    text: "早上好",
+    title: "公告",
+    id: 1,
+  };
+
   const tags: Tag[] = [
-    { id: "0", name: "black" },
-    { id: "1", name: "white" },
-    { id: "2", name: "yellow" },
-    { id: "3", name: "green" },
-    { id: "4", name: "orange" },
-    { id: "5", name: "pink" },
-    { id: "6", name: "cyan" },
+    { id: "0", name: "大橘" },
+    { id: "1", name: "虎纹" },
+    { id: "2", name: "温顺" },
+    { id: "3", name: "大吃" },
+    { id: "4", name: "凶人" },
+    { id: "5", name: "怕人" },
+    { id: "6", name: "奶牛" },
   ];
 
   const topElement = () => {
     return (
       <>
-        <PaddingTop />
+        <PaddingBlock />
         <div className={"space-y-3 mb-3"}>
           <Notification
             setShowFn={setNotifShow}
             isShow={NotifShow}
-            title={"速看"}
-            text={"1233211232424"}
+            id={notification.id}
+            title={notification.title}
+            text={notification.text}
           />
           <Title>{config.app.title}</Title>
           <TagSelector tags={tags} />
@@ -85,7 +100,12 @@ export default function Index() {
   };
 
   return (
-    <TopbarProvider title={"图鉴"} observeTargetSelector={".zt-main-list"}>
+    <TopbarProvider
+      title={"图鉴"}
+      observeTargetSelector={".zt-main-list"}
+      topClassName={"bg-primary-100"}
+      className={"bg-primary-100"}
+    >
       <VirtialList
         className={"mx-auto container"}
         list={data}

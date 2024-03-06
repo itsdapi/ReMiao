@@ -5,7 +5,6 @@ import aboutIcon from "@/public/icon/about.svg";
 import searchIcon from "@/public/icon/search.svg";
 import { switchTab } from "@tarojs/taro";
 // @ts-ignore
-import theme from "@/lib/theme";
 import { AppDispatch, RootState } from "@/lib/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { changeActive } from "@/lib/redux/active-tab-slice";
@@ -16,7 +15,7 @@ import "./index.css";
 export default function Tabbar() {
   const { active } = useSelector((state: RootState) => state.activeTab);
   const dispatch = useDispatch<AppDispatch>();
-  const primaryColor = theme.colors.primary;
+  const colors = config.app.colors;
   const handleTabChange = (id: number, path: string) => {
     dispatch(changeActive(id));
     switchTab({ url: path });
@@ -76,7 +75,7 @@ export default function Tabbar() {
           <SvgIcon
             src={item.icon}
             size={30}
-            color={active === item.id ? primaryColor[900] : "#6B7280"}
+            color={active === item.id ? colors.primary[900] : "#6B7280"}
           />
           {/*<span*/}
           {/*  style={{*/}

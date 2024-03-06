@@ -1,5 +1,5 @@
 import TopbarProvider from "@/ui/topbar";
-import { PaddingBottom, PaddingTop } from "@/ui/padding-top";
+import { PaddingBottom, PaddingBlock } from "@/ui/padding-block";
 import { useDebouncedCallback } from "use-debounce";
 import SearchInput from "@/ui/search-input";
 import Title from "@/ui/title";
@@ -50,7 +50,7 @@ export default function Search() {
   const topElement = () => {
     return (
       <>
-        <PaddingTop />
+        <PaddingBlock />
         <Title className={"mb-3"}>搜索</Title>
         <div className={"sticky mb-3 z-50"} style={{ top: topHeight }}>
           <SearchInput
@@ -110,6 +110,8 @@ export default function Search() {
       heightOffset={50}
       title={"搜索"}
       defaultHidden
+      topClassName={"bg-primary-100"}
+      className={"bg-primary-100"}
     >
       <VirtialList
         className={"mx-auto container"}

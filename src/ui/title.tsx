@@ -3,7 +3,7 @@ export default function Title({
   className,
 }: {
   children: React.ReactNode;
-  className: string;
+  className?: string;
 }) {
   return (
     <h1 className={`text-4xl font-bold ${className}`} id={"title"}>

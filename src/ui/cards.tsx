@@ -3,6 +3,7 @@ import CatHelp from "@/public/icon/cat_help.svg";
 import Close from "@/public/icon/close.svg";
 import { Image as TaroImage } from "@tarojs/components";
 import { Dispatch, SetStateAction } from "react";
+import { userReadNotification } from "@/lib/util";
 
 interface CardXLProps
   extends React.DetailedHTMLProps<
@@ -21,7 +22,6 @@ export function CardXL(props: CardXLProps) {
         src={props.src}
         ariaLabel={props.title ? props.title : "空图片"}
         className={"h-40 w-full rounded-2xl relative"}
-        mode={"aspectFill"}
       >
         <div
           className={
@@ -39,17 +39,20 @@ export function CardXL(props: CardXLProps) {
 export function Notification({
   text,
   title,
+  id,
   isShow,
   setShowFn,
 }: {
   text: string;
   title: string;
+  id: number;
   isShow: boolean;
   setShowFn?: Dispatch<SetStateAction<boolean>>;
 }) {
   const handleClose = () => {
     if (!setShowFn) return;
     setShowFn(false);
+    userReadNotification(id);
   };
   return (
     <div
@@ -85,7 +88,7 @@ export function PortraitCard(props: PortraitCardProps) {
       <Image
         ariaLabel={props.ariaLabel}
         src={props.src}
-        className={"rounded-2xl aspect-portrait w-36"}
+        className={"rounded-2xl w-56 h-[19rem] shadow-bb"}
       />
     </div>
   );

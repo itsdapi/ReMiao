@@ -43,8 +43,14 @@ export interface RespondErrorType {
 export interface CatDetail {
   info: Info;
   selectedPhotos: SelectedPhoto[];
-  tags: SelectedPhoto[];
+  tags: Tag[];
   coverPhoto: CoverPhoto;
+}
+
+export interface Tag {
+  id: number;
+  name: string;
+  createdDate: Date;
 }
 
 export interface Info {
@@ -56,7 +62,7 @@ export interface Info {
   haunt: string;
 }
 
-export interface SelectedPhoto {}
+export interface SelectedPhoto extends CoverPhoto {}
 
 export interface SearchResult {
   id: number;

@@ -1,12 +1,15 @@
 import { useEffect } from "react";
 import TopbarProvider from "@/ui/topbar";
-import { PaddingTop } from "@/ui/padding-top";
+import { PaddingBlock } from "@/ui/padding-block";
 
 export default function About() {
   useEffect(() => {}, []);
   return (
-    <TopbarProvider>
-      <PaddingTop />
+    <TopbarProvider
+      topClassName={"bg-primary-100"}
+      className={"bg-primary-100"}
+    >
+      <PaddingBlock />
       <div>about page</div>
     </TopbarProvider>
   );

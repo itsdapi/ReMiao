@@ -8,3 +8,5 @@ node_modules/
 .history
 .idea
 /.vscode/
+.env.development
+.env.production

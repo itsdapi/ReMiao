@@ -1,31 +1,28 @@
 import fallbackImage from "@/public/image/default-fallback-image.png";
-import { ImageProps, Image as TaroImage } from "@tarojs/components";
-import React from "react";
-import { useState } from "react";
+import { Image as TaroImage } from "@tarojs/components";
+import { memo, useState } from "react";
 
-const Image = React.memo(
+const Image = memo(
   ({
     src,
-    mode,
     ariaLabel,
     className,
     height,
     width,
-    children
+    children,
   }: {
-    children?: React.ReactNode
+    children?: React.ReactNode;
     ariaLabel: string;
     src?: string;
-    mode?: keyof ImageProps.Mode;
     className?: string;
     height?: number;
     width?: number;
   }) => {
     const [loaded, setLoaded] = useState<boolean>(false);
-    const img = (
+    return (
       <TaroImage
         src={src ? src : fallbackImage}
-        mode={mode}
+        mode={"aspectFill"}
         style={{ height: height, width: width }}
         className={`${className} bg-gray-100 ${loaded ? "" : "animate-pulse"}`}
         lazyLoad
@@ -38,8 +35,6 @@ const Image = React.memo(
         {children}
       </TaroImage>
     );
-
-    return img;
   }
 );
 

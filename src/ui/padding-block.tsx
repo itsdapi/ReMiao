@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getStatusBarHeight } from "@/lib/util";
 import { config } from "@/lib/config";
 
-export function PaddingTop() {
+export function PaddingBlock() {
   const [statusBarHeight, setStatusBarHeight] = useState<number>(0);
   useEffect(() => {
     const getSafeHeight = async () => {
@@ -21,4 +21,8 @@ export function PaddingBottom() {
       className={"w-full"}
     />
   );
+}
+
+export function PaddingBottomS() {
+  return <div className={"w-full h-5"} />;
 }

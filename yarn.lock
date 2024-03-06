@@ -1777,11 +1777,6 @@
     redux-thunk "^3.1.0"
     reselect "^5.0.1"
 
-"@remix-run/router@1.15.1":
-  version "1.15.1"
-  resolved "https://registry.npmjs.org/@remix-run/router/-/router-1.15.1.tgz"
-  integrity sha512-zcU0gM3z+3iqj8UX45AmWY810l3oUmXM7uH4dt5xtzvMhRtYVhKGOmgOd1877dOPPepfCjUv57w+syamWIYe7w==
-
 "@sideway/address@^4.1.5":
   version "4.1.5"
   resolved "https://registry.npmjs.org/@sideway/address/-/address-4.1.5.tgz"
@@ -10589,21 +10584,6 @@ react-refresh@^0.4.0:
   version "0.4.3"
   resolved "https://registry.npmjs.org/react-refresh/-/react-refresh-0.4.3.tgz"
   integrity sha512-Hwln1VNuGl/6bVwnd0Xdn1e84gT/8T9aYNL+HAKDArLCS7LWjwr7StE30IEYbIkx0Vi3vs+coQxe+SQDbGbbpA==
-
-react-router-dom@^6.22.1:
-  version "6.22.1"
-  resolved "https://registry.npmjs.org/react-router-dom/-/react-router-dom-6.22.1.tgz"
-  integrity sha512-iwMyyyrbL7zkKY7MRjOVRy+TMnS/OPusaFVxM2P11x9dzSzGmLsebkCvYirGq0DWB9K9hOspHYYtDz33gE5Duw==
-  dependencies:
-    "@remix-run/router" "1.15.1"
-    react-router "6.22.1"
-
-react-router@6.22.1:
-  version "6.22.1"
-  resolved "https://registry.npmjs.org/react-router/-/react-router-6.22.1.tgz"
-  integrity sha512-0pdoRGwLtemnJqn1K0XHUbnKiX0S4X8CgvVVmHGOWmofESj31msHo/1YiqcJWK7Wxfq2a4uvvtS01KAQyWK/CQ==
-  dependencies:
-    "@remix-run/router" "1.15.1"
 
 react@^18.0.0:
   version "18.2.0"

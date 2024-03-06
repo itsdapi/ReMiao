@@ -1,10 +1,10 @@
 import { PropsWithChildren } from "react";
 import { useLaunch, navigateTo, useError } from "@tarojs/taro";
-import "./app.css";
-import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "@/lib/redux/store";
 import "abortcontroller-polyfill/dist/abortcontroller-polyfill-only";
+import "taro-ui/dist/style/index.scss";
+import "./app.css";
 
 function App({ children }: PropsWithChildren<any>) {
   useLaunch(async () => {
@@ -20,9 +20,7 @@ function App({ children }: PropsWithChildren<any>) {
   return (
     <>
       <a />
-      <Provider store={store}>
-        <BrowserRouter>{children}</BrowserRouter>
-      </Provider>
+      <Provider store={store}>{children}</Provider>
     </>
   );
 }
