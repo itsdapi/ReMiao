@@ -53,7 +53,6 @@ export default function Index() {
   const topElement = () => {
     return (
       <>
-        <PaddingBlock />
         <div className={"space-y-3 mb-3"}>
           <Notification
             setShowFn={setNotifShow}
@@ -67,6 +66,10 @@ export default function Index() {
         </div>
       </>
     );
+  };
+
+  const topTopElement = () => {
+    return <PaddingBlock />;
   };
 
   const bottomElement = () => {
@@ -102,7 +105,7 @@ export default function Index() {
   return (
     <TopbarProvider
       title={"图鉴"}
-      observeTargetSelector={".zt-main-list"}
+      observeTargetSelector={"#content"}
       topClassName={"bg-primary-100"}
       className={"bg-primary-100"}
     >
@@ -126,6 +129,7 @@ export default function Index() {
         }}
         onRender={renderItem}
         onRenderTop={topElement}
+        onRenderTopTop={topTopElement}
         onRenderBottom={bottomElement}
       />
     </TopbarProvider>

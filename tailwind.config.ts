@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import typography from "@tailwindcss/typography";
 import { config } from "./src/lib/config";
 
 export default {
@@ -24,7 +25,19 @@ export default {
       boxShadow: {
         bb: "0rem 0.9375rem 1.25rem 0.46875rem rgba(208, 196, 183, 0.397)",
       },
+      fontSize: {
+        plus: ["0.99rem", "1.5rem"],
+      },
+      keyframes: {
+        blink: {
+          "0%, 100%": { backgroundColor: config.app.colors.primary["200"] },
+          "50%": { backgroundColor: config.app.colors.primary["300"] },
+        },
+      },
+      animation: {
+        blink: "blink 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+      },
     },
   },
-  plugins: [],
+  plugins: [typography],
 } satisfies Config;

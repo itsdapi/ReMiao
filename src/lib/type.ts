@@ -50,3 +50,5 @@ export class RequestError extends Error {
 }
 
 export type NotificationConfig = Number[];
+
+export type ErrorDisplayType = "toast" | "page";

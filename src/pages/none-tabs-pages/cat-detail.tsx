@@ -1,21 +1,14 @@
-import { useEffect, useState } from "react";
 import TopbarProvider from "@/ui/topbar";
-import { getCurrentInstance } from "@tarojs/runtime";
 import { PaddingBlock, PaddingBottomS } from "@/ui/padding-block";
 import { getCatDetail } from "@/lib/miao-api/cat";
-import { CatDetail as CatDetailType } from "@/lib/miao-api/type";
 import { useShareAppMessage, ShareAppMessageReturn } from "@tarojs/taro";
 import { config } from "@/lib/config";
-import { errorHandler } from "@/lib/util";
 import PortraitScrollList from "@/ui/components/portrait-scroll-list";
 import { CatStatus } from "@/lib/miao-api/enum";
 import { KVInfo } from "@/ui/info";
 import { RoundBtn } from "@/ui/button/button";
 import Tag from "@/ui/tag";
-
-interface CatDetailProps {
-  id: number;
-}
+import { useFetch, useParams } from "@/lib/hook";
 
 definePageConfig({
   navigationBarTitleText: "猫咪",
@@ -23,26 +16,9 @@ definePageConfig({
   enableShareTimeline: true,
 });
 
-export default function CatDetail() {
-  const [data, setData] = useState<CatDetailType>();
-  const [params, setParams] = useState<CatDetailProps>();
-  useEffect(() => {
-    const _params = getCurrentInstance().router?.params as
-      | CatDetailProps
-      | undefined;
-    const initData = async () => {
-      if (!_params) {
-        errorHandler("猫咪のID没有传入！", "page");
-        throw new Error("Cat Detail page params undefined!");
-      }
-      const result = await getCatDetail(_params.id);
-      result.selectedPhotos.push(result.coverPhoto);
-      setData(result);
-      setParams(_params);
-    };
-
-    initData();
-  }, []);
+export default function CatDetail(param: any) {
+  const params = useParams(param, ["id"]);
+  const { data } = useFetch(getCatDetail, params.id);
 
   useShareAppMessage((): ShareAppMessageReturn => {
     return {
@@ -59,7 +35,9 @@ export default function CatDetail() {
       topClassName={"bg-primary-100"}
     >
       <PaddingBlock />
-      <PortraitScrollList photos={data?.selectedPhotos} />
+      <PortraitScrollList
+        photos={data?.selectedPhotos.concat(data?.coverPhoto)}
+      />
       <div
         className={
           "flex flex-col justify-center items-center mt-5 mx-10 space-y-5"

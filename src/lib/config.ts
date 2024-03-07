@@ -7,6 +7,9 @@ export const config = {
     catDetailPath: "/pages/none-tabs-pages/cat-detail",
     tabbarHeight: 5,
     title: "莞工猫猫图鉴",
+    // 颜色配置指南
+    // 除了需要修改这里的颜色之外 还需要修改两处地方 一处是app.css 这个负责顶部状态栏的颜色
+    // 还有一处是custom-tab-bar里面的css（sb小程序甚至都不让我读app.css）
     colors: {
       primary: {
         900: "#F4BA9D",

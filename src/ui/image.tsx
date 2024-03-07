@@ -7,6 +7,7 @@ const Image = memo(
     src,
     ariaLabel,
     className,
+    style,
     height,
     width,
     children,
@@ -15,6 +16,7 @@ const Image = memo(
     ariaLabel: string;
     src?: string;
     className?: string;
+    style?: React.CSSProperties;
     height?: number;
     width?: number;
   }) => {
@@ -23,8 +25,8 @@ const Image = memo(
       <TaroImage
         src={src ? src : fallbackImage}
         mode={"aspectFill"}
-        style={{ height: height, width: width }}
-        className={`${className} bg-gray-100 ${loaded ? "" : "animate-pulse"}`}
+        style={{ height: height, width: width, ...style }}
+        className={`${className} relative }`}
         lazyLoad
         fadeIn
         ariaLabel={ariaLabel}
@@ -32,6 +34,11 @@ const Image = memo(
           setLoaded(true);
         }}
       >
+        <div
+          className={`animate-blink transition-opacity absolute w-full h-full inset-x-0 inset-y-0 z-50 ${
+            loaded ? "opacity-0" : "opacity-100"
+          }`}
+        />
         {children}
       </TaroImage>
     );

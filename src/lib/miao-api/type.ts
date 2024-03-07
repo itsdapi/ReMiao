@@ -41,7 +41,7 @@ export interface RespondErrorType {
 }
 
 export interface CatDetail {
-  info: Info;
+  info: CatInfo;
   selectedPhotos: SelectedPhoto[];
   tags: Tag[];
   coverPhoto: CoverPhoto;
@@ -53,7 +53,7 @@ export interface Tag {
   createdDate: Date;
 }
 
-export interface Info {
+export interface CatInfo {
   status: string;
   name: string;
   species: string;
@@ -70,4 +70,23 @@ export interface SearchResult {
   description: string;
   haunt: string;
   coverPhoto: CoverPhoto;
+}
+
+export interface UserInfo {
+  createdDate: Date;
+  lastLoginDate: Date;
+  role: string;
+  nickName: string;
+  avatarFileName: string;
+  id: number;
+  points: number;
+}
+
+export interface QrCode {
+  image: string;
+}
+
+export interface UploadTokenRespond {
+  url: string;
+  params: object;
 }

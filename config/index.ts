@@ -30,7 +30,7 @@ export default defineConfig(async (merge, {}) => {
     framework: "react",
     compiler: "webpack5",
     cache: {
-      enable: false, // Webpack 持久化缓存配置，建议开启。默认配置请参考：https://docs.taro.zone/docs/config-detail#cache
+      enable: true, // Webpack 持久化缓存配置，建议开启。默认配置请参考：https://docs.taro.zone/docs/config-detail#cache
     },
     mini: {
       postcss: {
@@ -41,7 +41,7 @@ export default defineConfig(async (merge, {}) => {
         url: {
           enable: true,
           config: {
-            limit: 1024, // 设定转换尺寸上限
+            limit: 10240, // 设定转换尺寸上限
           },
         },
         cssModules: {
@@ -55,22 +55,6 @@ export default defineConfig(async (merge, {}) => {
       webpackChain(chain) {
         chain.resolve.plugin("tsconfig-paths").use(TsconfigPathsPlugin);
         chain.merge({
-          module: {
-            rules: [
-              // ...其他规则...
-              {
-                test: /\.svg$/,
-                use: [
-                  {
-                    loader: "url-loader",
-                    options: {
-                      limit: Infinity, // 设置为无限大，所有SVG文件都会被转换
-                    },
-                  },
-                ],
-              },
-            ],
-          },
           plugin: {
             install: {
               plugin: UnifiedWebpackPluginV5,

@@ -17,7 +17,7 @@ export default function TagSelector({ tags }: { tags: TagType[] }) {
       {tags.map((tag) => (
         <Tag
           key={tag.id}
-          text={tag.name}
+          text={`#${tag.name}`}
           isActive={activate.includes(tag.id)}
           onClick={() => handleTagClick(tag.id)}
         />

@@ -1,16 +1,21 @@
 import {
   AppRuntime,
+  ErrorDisplayType,
   NotificationConfig,
   RequestError,
   RequestType,
   TopHeightReturnType,
 } from "@/lib/type";
 import {
+  UserInfo,
   getSystemInfo,
   createIntersectionObserver,
   getMenuButtonBoundingClientRect,
   setStorageSync,
   getStorageSync,
+  getUserProfile,
+  downloadFile as TaroDownloadFile,
+  uploadFile as TaroUploadFile,
   navigateTo,
   showToast as TaroShowToast,
   login as TaroLogin,
@@ -98,7 +103,7 @@ export function showToast(
   });
 }
 
-export function errorHandler(errMsg: string, type: "toast" | "page") {
+export function errorHandler(errMsg: string, type: ErrorDisplayType) {
   if (type === "page") {
     navigateTo({ url: `/pages/error?errorMessage=${errMsg}` });
   } else if (type === "toast") {
@@ -159,4 +164,70 @@ export async function getUserNotificationConfig() {
 
 export function getEnvMode() {
   return process.env.NODE_ENV;
+}
+
+export function getTaroUserInfo(): Promise<UserInfo> {
+  return new Promise((resolve, reject) => {
+    getUserProfile({
+      desc: "用于完善用户资料",
+      success: (res) => {
+        resolve(res.userInfo);
+      },
+      fail: (error) => {
+        reject(error);
+      },
+    });
+  });
+}
+
+export function downloadFile(url: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    TaroDownloadFile({
+      url: url,
+      success: (res) => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          // console.log("download success", res);
+          resolve(res.tempFilePath);
+        } else {
+          reject(res.errMsg);
+        }
+      },
+      fail: (error) => {
+        reject(error);
+      },
+    });
+  });
+}
+
+export function uploadFile(
+  url: string,
+  filePath: string,
+  name: string,
+  header?: object,
+  formData?: object
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    TaroUploadFile({
+      url: url,
+      filePath: filePath,
+      name: name,
+      header: header,
+      formData: formData,
+      success: (res) => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          resolve(res.data);
+        } else {
+          reject(res.errMsg);
+        }
+      },
+      fail: (error) => {
+        reject(error);
+      },
+    });
+  });
+}
+
+export function getFileExtName(filePath: string) {
+  // console.log("getting ext", filePath);
+  return filePath.substring(filePath.indexOf(".") + 1).toLowerCase();
 }

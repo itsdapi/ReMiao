@@ -42,6 +42,7 @@
   "dependencies": {
     "@babel/runtime": "^7.21.5",
     "@reduxjs/toolkit": "^2.2.1",
+    "@tailwindcss/typography": "^0.5.10",
     "@tarojs/components": "3.6.23",
     "@tarojs/helper": "3.6.23",
     "@tarojs/plugin-framework-react": "3.6.23",
@@ -101,7 +102,6 @@
     "ts-node": "^10.9.1",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
     "typescript": "^5.1.0",
-    "url-loader": "^4.1.1",
     "weapp-tailwindcss": "^3.0.10",
     "webpack": "5.78.0"
   }

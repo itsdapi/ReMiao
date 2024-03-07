@@ -1,8 +1,14 @@
 import { config } from "@/lib/config";
 import { LoginRespond } from "@/lib/miao-api/type";
 import { MIAO_API_LOGIN_PATH } from "@/lib/static";
-import { RequestError, RequestType } from "@/lib/type";
-import { errorHandler, getRuntime, login, request } from "@/lib/util";
+import { ErrorDisplayType, RequestError, RequestType } from "@/lib/type";
+import {
+  errorHandler,
+  getRuntime,
+  login,
+  request,
+  uploadFile,
+} from "@/lib/util";
 import { store } from "@/lib/redux/store";
 import {
   actionFetchLoginData,
@@ -29,7 +35,8 @@ export async function miaoTokenCall() {
  * @param params 请求url参数
  * @param apiName api名字 3个字
  * @param overwriteToken 覆盖获取token的方式 用于未登陆的时候直接调用
- * @param times 重试次数 修改本函数的默认值来调整重试次数
+ * @param times 重试次数 修改本函数的默认值来调整重试次数 设置为0时终结
+ * @param errorHandleType 决定出错的展示效果 'page' 会跳转到错误页面 这样或许能让用户认为app坏了hhh
  * @returns
  */
 export async function miaoApiCall(
@@ -41,7 +48,8 @@ export async function miaoApiCall(
   },
   apiName?: string,
   overwriteToken?: string,
-  times = 1
+  times = 1,
+  errorHandleType?: ErrorDisplayType
 ) {
   // await miaoLogin();
   const searchParams = new URLSearchParams(params);
@@ -71,9 +79,23 @@ export async function miaoApiCall(
         );
       }
     }
-    errorHandler(`${apiName ? apiName : ""}调用失败`, "toast");
+    errorHandler(
+      `${apiName ? apiName : ""}调用失败`,
+      errorHandleType ? errorHandleType : "toast"
+    );
     throw error;
   }
+}
+
+export async function miaoUploadCall(
+  url: string,
+  filePath: string,
+  uploadParams: object
+) {
+  const header = {
+    "Content-Type": "multipart/form-data",
+  };
+  return uploadFile(url, filePath, "file", header, uploadParams);
 }
 
 async function getToken(isNew?: boolean) {

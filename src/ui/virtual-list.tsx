@@ -1,14 +1,14 @@
-import {Component, CSSProperties} from 'react'
-import Taro, { createSelectorQuery, getSystemInfoSync } from '@tarojs/taro'
-import { View, ScrollView, Block } from '@tarojs/components'
-import PropTypes, { InferProps } from 'prop-types'
+import { Component, CSSProperties } from "react";
+import Taro, { createSelectorQuery, getSystemInfoSync } from "@tarojs/taro";
+import { View, ScrollView, Block } from "@tarojs/components";
+import PropTypes, { InferProps } from "prop-types";
 
 interface BaseComponent {
   className?: string;
   style?: CSSProperties;
 }
 
-type ListType = "single" | "multi"
+type ListType = "single" | "multi";
 
 interface VirtualListState {
   /**
@@ -40,8 +40,8 @@ interface VirtualListProps extends BaseComponent {
   listId?: string;
   /**
    * 传入组件内的list类型
-   * @param	single 一次性传入列表所有数据
-   * @param	multi 从服务端分页请求，合并之后传入组件
+   * @param  single 一次性传入列表所有数据
+   * @param  multi 从服务端分页请求，合并之后传入组件
    */
   listType: ListType;
   /**
@@ -64,6 +64,7 @@ interface VirtualListProps extends BaseComponent {
    * 自定义scrollView的参数，会合并到组件内部的scrollView的参数里
    */
   scrollViewProps?: any;
+
   /**
    * 列表的渲染回调，用于自定义列表Item
    * @param item 列表的单个数据项的值
@@ -72,34 +73,45 @@ interface VirtualListProps extends BaseComponent {
    */
   // eslint-disable-next-line no-unused-vars
   onRender(item: any, index: number, mainIndex: number): JSX.Element;
+
   /**
    * 列表是否已经触底
    */
   onBottom?(): void;
+
   /**
    * 列表是否已经把全部数据加载完成
    */
   onComplete?(): void;
+
   /**
    * 列表上部分内容渲染回调，用于渲染插入虚拟列表上边的内容
    */
   onRenderTop?(): any;
+
+  /**
+   * 列表最顶部的渲染回调，用来添加padding
+   */
+  onRenderTopTop?(): any;
+
   /**
    * 列表下部分内容渲染回调，用于渲染插入虚拟列表下边的内容
    */
   onRenderBottom?(): any;
+
   /**
    * 获取滚动信息
    */
   // eslint-disable-next-line no-unused-vars
   onGetScrollData?(event: any): void;
+
   /**
    * 渲染loading内容
    */
   onRenderLoad?(): any;
 }
 
-export const isH5 = Taro.ENV_TYPE.WEB === Taro.getEnv()
+export const isH5 = Taro.ENV_TYPE.WEB === Taro.getEnv();
 
 /**
  * 截流函数
@@ -110,340 +122,386 @@ export const isH5 = Taro.ENV_TYPE.WEB === Taro.getEnv()
  * @returns {Function} 截流函数
  */
 // eslint-disable-next-line no-unused-vars
-export const throttle = (fn: (params: any) => void, delay: number, mustRunDelay: number) => {
-  let timer: NodeJS.Timeout
-  let startTime: number
+export const throttle = (
+  fn: (params: any) => void,
+  delay: number,
+  mustRunDelay: number
+) => {
+  let timer: NodeJS.Timeout;
+  let startTime: number;
   return (...args) => {
-    const curTime = Date.now()
-    clearTimeout(timer)
+    const curTime = Date.now();
+    clearTimeout(timer);
     if (!startTime) {
-      startTime = curTime
+      startTime = curTime;
     }
     if (curTime - startTime >= mustRunDelay) {
-      fn.apply(this, args)
-      startTime = curTime
+      fn.apply(this, args);
+      startTime = curTime;
     } else {
       timer = setTimeout(() => {
-        fn.apply(this, args)
-      }, delay)
+        fn.apply(this, args);
+      }, delay);
     }
-  }
-}
+  };
+};
 
-
-export default class VirtialList extends Component<VirtualListProps, VirtualListState> {
-  public static propTypes: InferProps<VirtualListProps>
-  public static defaultProps: VirtualListProps
+export default class VirtialList extends Component<
+  VirtualListProps,
+  VirtualListState
+> {
+  public static propTypes: InferProps<VirtualListProps>;
+  public static defaultProps: VirtualListProps;
 
   constructor(props: VirtualListProps) {
-    super(props)
+    super(props);
     this.state = {
       wholePageIndex: 0, // 每一屏为一个单位，屏幕索引
       twoList: [], // 二维数组
       isComplete: false, // 数据是否全部加载完成
       innerScrollTop: 0, // 记录组件内部的滚动高度
-    } as VirtualListState
+    } as VirtualListState;
   }
 
   componentDidMount(): void {
-    const { list, listType } = this.props
-    this.getSystemInformation()
+    const { list, listType } = this.props;
+    this.getSystemInformation();
     if (listType === "single") {
-      this.formatList(list)
+      this.formatList(list);
     } else if (listType === "multi") {
-      this.formatMultiList(list)
+      this.formatMultiList(list);
     }
   }
+
   UNSAFE_componentWillReceiveProps(nextProps: VirtualListProps): void {
-    const { list, listType, pageNum: oldPageNUm = 1 } = this.props
+    const { list, listType, pageNum: oldPageNUm = 1 } = this.props;
     if (listType === "single") {
       // 提前把innerScrollTop置为不是0，防止列表置顶失效
       this.setState({
         innerScrollTop: 1,
-      })
+      });
 
       if (JSON.stringify(nextProps.list) !== JSON.stringify(list)) {
-        this.pageHeightArr = []
-        this.setState({
-          wholePageIndex: 0,
-          isComplete: false,
-          twoList: [],
-          innerScrollTop: 0,
-        }, () => {
-          if (nextProps.list?.length) {
-            this.formatList(nextProps.list)
-          } else {
-            this.handleComplete()
-          }
-        })
-      }
-    } else if (listType === "multi") {
-      const { pageNum = 1 } = nextProps
-      if (JSON.stringify(nextProps.list) !== JSON.stringify(list)) {
-        if (pageNum < oldPageNUm && pageNum == 1) {
-          this.initList = []
-          this.setState({
-            innerScrollTop: 1,
-          })
-          this.setState({
+        this.pageHeightArr = [];
+        this.setState(
+          {
             wholePageIndex: 0,
             isComplete: false,
             twoList: [],
-          }, () => {
+            innerScrollTop: 0,
+          },
+          () => {
             if (nextProps.list?.length) {
-              this.formatMultiList(nextProps.list, pageNum)
+              this.formatList(nextProps.list);
             } else {
-              this.handleComplete()
+              this.handleComplete();
             }
-          })
+          }
+        );
+      }
+    } else if (listType === "multi") {
+      const { pageNum = 1 } = nextProps;
+      if (JSON.stringify(nextProps.list) !== JSON.stringify(list)) {
+        if (pageNum < oldPageNUm && pageNum == 1) {
+          this.initList = [];
+          this.setState({
+            innerScrollTop: 1,
+          });
+          this.setState(
+            {
+              wholePageIndex: 0,
+              isComplete: false,
+              twoList: [],
+            },
+            () => {
+              if (nextProps.list?.length) {
+                this.formatMultiList(nextProps.list, pageNum);
+              } else {
+                this.handleComplete();
+              }
+            }
+          );
           Taro.nextTick(() => {
             this.setState({
               innerScrollTop: 0,
-            })
-          })
+            });
+          });
         } else {
-          this.formatMultiList(nextProps.list, pageNum)
+          this.formatMultiList(nextProps.list, pageNum);
         }
       }
     }
     if (!nextProps.list?.length) {
       // list为空
-      this.handleComplete()
+      this.handleComplete();
     }
   }
-  private pageHeightArr: number[] = [] // 用来装每一屏的高度
-  private initList: any[] = [] // 承载初始化的二维数组
-  private windowHeight = 0 // 当前屏幕的高度
-  private currentPage: any = Taro.getCurrentInstance()
-  private observer: IntersectionObserver
 
-  getSystemInformation = ():void => {
+  private pageHeightArr: number[] = []; // 用来装每一屏的高度
+  private initList: any[] = []; // 承载初始化的二维数组
+  private windowHeight = 0; // 当前屏幕的高度
+  private currentPage: any = Taro.getCurrentInstance();
+  private observer: IntersectionObserver;
+
+  getSystemInformation = (): void => {
     try {
-      const res = getSystemInfoSync()
-      this.windowHeight = res.windowHeight
+      const res = getSystemInfoSync();
+      this.windowHeight = res.windowHeight;
     } catch (err) {
-      console.error(`获取系统信息失败：${err}`)
+      console.error(`获取系统信息失败：${err}`);
     }
-  }
+  };
   /**
    * 列表数据渲染完成
    */
-  handleComplete = ():void => {
-    const { onComplete } = this.props
-    this.setState({
-      isComplete: true,
-    }, () => {
-      onComplete?.()
-    })
-  }
+  handleComplete = (): void => {
+    const { onComplete } = this.props;
+    this.setState(
+      {
+        isComplete: true,
+      },
+      () => {
+        onComplete?.();
+      }
+    );
+  };
+
   /**
    * 当list是通过服务端分页获取的时候，对list进行处理
-   * @param	list 外部list
-   * @param	pageNum 当前页码
+   * @param  list 外部list
+   * @param  pageNum 当前页码
    */
   formatMultiList(list: any[] = [], pageNum = 1): void {
-    const { twoList} = this.state
-    if (!list?.length) return
-    this.segmentList(list)
-    twoList[pageNum - 1] = this.initList[pageNum - 1]
-    this.setState({
-      twoList: [...twoList],
-      wholePageIndex: pageNum - 1,
-    }, () => {
-      Taro.nextTick(() => {
-        this.setHeight(list)
-      })
-    })
+    const { twoList } = this.state;
+    if (!list?.length) return;
+    this.segmentList(list);
+    twoList[pageNum - 1] = this.initList[pageNum - 1];
+    this.setState(
+      {
+        twoList: [...twoList],
+        wholePageIndex: pageNum - 1,
+      },
+      () => {
+        Taro.nextTick(() => {
+          this.setHeight(list);
+        });
+      }
+    );
   }
+
   /**
    * 按规则分割list，存在私有变量initList，备用
    */
   segmentList(list: any[] = []): void {
-    const { segmentNum } = this.props
-    let arr: any[] = []
-    const _list: any[] = []
+    const { segmentNum } = this.props;
+    let arr: any[] = [];
+    const _list: any[] = [];
     list.forEach((item, index) => {
-      arr.push(item)
+      arr.push(item);
       if ((index + 1) % segmentNum === 0) {
-        _list.push(arr)
-        arr = []
+        _list.push(arr);
+        arr = [];
       }
-    })
+    });
     // 将分段不足segmentNum的剩余数据装入_list
-    const restList = list.slice(_list.length * segmentNum)
+    const restList = list.slice(_list.length * segmentNum);
     if (restList?.length) {
-      _list.push(restList)
+      _list.push(restList);
       if (_list.length <= 1) {
         // 如果数据量少，不足一个segmentNum，则触发完成回调
-        this.handleComplete()
+        this.handleComplete();
       }
     }
-    this.initList = _list
+    this.initList = _list;
   }
+
   /**
    * 将列表格式化为二维
-   * @param	list 	列表
+   * @param  list  列表
    */
   formatList(list: any[] = []): void {
-    this.segmentList(list)
-    this.setState({
-      twoList: this.initList.slice(0, 1),
-    }, () => {
-      Taro.nextTick(() => {
-        this.setHeight(list)
-      })
-    })
-  }
-  renderNext = (): void => {
-    const { onBottom, listType, scrollViewProps, list } = this.props
-    if (listType === "single") {
-      const page_index = this.state.wholePageIndex + 1
-      if (!this.initList[page_index]?.length) {
-        this.handleComplete()
-
-        return
+    this.segmentList(list);
+    this.setState(
+      {
+        twoList: this.initList.slice(0, 1),
+      },
+      () => {
+        Taro.nextTick(() => {
+          this.setHeight(list);
+        });
       }
-      onBottom?.()
-
-      this.setState({
-        wholePageIndex: page_index,
-      }, () => {
-        const { wholePageIndex, twoList } = this.state
-        twoList[wholePageIndex] = this.initList[wholePageIndex]
-        this.setState({
-          twoList: [...twoList],
-        }, () => {
-          Taro.nextTick(() => {
-            this.setHeight(list)
-          })
-        })
-      })
-    } else if (listType === "multi") {
-      scrollViewProps?.onScrollToLower?.()
-    }
+    );
   }
+
+  renderNext = (): void => {
+    const { onBottom, listType, scrollViewProps, list } = this.props;
+    if (listType === "single") {
+      const page_index = this.state.wholePageIndex + 1;
+      if (!this.initList[page_index]?.length) {
+        this.handleComplete();
+
+        return;
+      }
+      onBottom?.();
+
+      this.setState(
+        {
+          wholePageIndex: page_index,
+        },
+        () => {
+          const { wholePageIndex, twoList } = this.state;
+          twoList[wholePageIndex] = this.initList[wholePageIndex];
+          this.setState(
+            {
+              twoList: [...twoList],
+            },
+            () => {
+              Taro.nextTick(() => {
+                this.setHeight(list);
+              });
+            }
+          );
+        }
+      );
+    } else if (listType === "multi") {
+      scrollViewProps?.onScrollToLower?.();
+    }
+  };
+
   /**
    * 设置每一个维度的数据渲染完成之后所占的高度
    */
-  setHeight(list: any[] = []):void {
-    const { wholePageIndex } = this.state
-    const { listId } = this.props
-    const query = createSelectorQuery()
-    query.select(`#${listId} .wrap_${wholePageIndex}`).boundingClientRect()
+  setHeight(list: any[] = []): void {
+    const { wholePageIndex } = this.state;
+    const { listId } = this.props;
+    const query = createSelectorQuery();
+    query.select(`#${listId} .wrap_${wholePageIndex}`).boundingClientRect();
     query.exec((res) => {
       // 有数据的时候才去收集高度，不然页面初始化渲染（在H5中无数据）收集到的高度是错误的
       if (list?.length) {
-        this.pageHeightArr.push(res?.[0]?.height)
+        this.pageHeightArr.push(res?.[0]?.height);
       }
-    })
-    this.handleObserve()
+    });
+    this.handleObserve();
   }
+
   webObserve = (): void => {
-    const { listId } = this.props
-    const $targets = document.querySelectorAll(`#${listId} .zt-main-list>taro-view-core`)
+    const { listId } = this.props;
+    const $targets = document.querySelectorAll(
+      `#${listId} .zt-main-list>taro-view-core`
+    );
     const options = {
       root: document.querySelector(`#${listId}`),
       rootMargin: "500px 0px",
       // threshold: [0.5],
-    }
-    this.observer = new IntersectionObserver(this.observerCallBack, options)
-    $targets.forEach($item => {
-      this.observer?.observe($item)
-    })
-  }
+    };
+    this.observer = new IntersectionObserver(this.observerCallBack, options);
+    $targets.forEach(($item) => {
+      this.observer?.observe($item);
+    });
+  };
   observerCallBack = (entries: IntersectionObserverEntry[]): void => {
-    const { twoList } = this.state
-    entries.forEach((item ) => {
-      const screenIndex = item.target['data-index']
+    const { twoList } = this.state;
+    entries.forEach((item) => {
+      const screenIndex = item.target["data-index"];
       if (item.isIntersecting) {
         // 如果有相交区域，则将对应的维度进行赋值
-        twoList[screenIndex] = this.initList[screenIndex]
+        twoList[screenIndex] = this.initList[screenIndex];
         this.setState({
           twoList: [...twoList],
-        })
+        });
       } else {
         // 当没有与当前视口有相交区域，则将改屏的数据置为该屏的高度占位
-        twoList[screenIndex] = { height: this.pageHeightArr[screenIndex] }
+        twoList[screenIndex] = { height: this.pageHeightArr[screenIndex] };
         this.setState({
           twoList: [...twoList],
-        })
+        });
       }
-    })
-  }
+    });
+  };
   /**
    * 监听可视区域
    */
   handleObserve = (): void => {
     if (isH5) {
-      this.webObserve()
+      this.webObserve();
     } else {
-      this.miniObserve()
+      this.miniObserve();
     }
-  }
+  };
   /**
    * 小程序平台监听
    */
   miniObserve = (): void => {
-    const { wholePageIndex } = this.state
-    const { scrollViewProps, listId, screenNum } = this.props
+    const { wholePageIndex } = this.state;
+    const { scrollViewProps, listId, screenNum } = this.props;
     // 以传入的scrollView的高度为相交区域的参考边界，若没传，则默认使用屏幕高度
-    const scrollHeight = scrollViewProps?.style?.height || this.windowHeight
-    const observer = Taro.createIntersectionObserver(this.currentPage.page).relativeToViewport({
+    const scrollHeight = scrollViewProps?.style?.height || this.windowHeight;
+    const observer = Taro.createIntersectionObserver(
+      this.currentPage.page
+    ).relativeToViewport({
       top: screenNum * scrollHeight,
       bottom: screenNum * scrollHeight,
-    })
+    });
     observer.observe(`#${listId} .wrap_${wholePageIndex}`, (res) => {
-      const { twoList } = this.state
+      const { twoList } = this.state;
       if (res?.intersectionRatio <= 0) {
         // 当没有与当前视口有相交区域，则将改屏的数据置为该屏的高度占位
-        twoList[wholePageIndex] = { height: this.pageHeightArr[wholePageIndex] }
+        twoList[wholePageIndex] = {
+          height: this.pageHeightArr[wholePageIndex],
+        };
         this.setState({
           twoList: [...twoList],
-        })
+        });
       } else if (!twoList[wholePageIndex]?.length) {
         // 如果有相交区域，则将对应的维度进行赋值
-        twoList[wholePageIndex] = this.initList[wholePageIndex]
+        twoList[wholePageIndex] = this.initList[wholePageIndex];
         this.setState({
           twoList: [...twoList],
-        })
+        });
       }
-    })
-  }
+    });
+  };
 
-  handleScroll = throttle((event: any): void => {
-    const { listId } = this.props
-    this.props.onGetScrollData?.({
-      [`${listId}`]: event,
-    })
-    this.props.scrollViewProps?.onScroll?.(event)
-  }, 300, 300)
+  handleScroll = throttle(
+    (event: any): void => {
+      const { listId } = this.props;
+      this.props.onGetScrollData?.({
+        [`${listId}`]: event,
+      });
+      this.props.scrollViewProps?.onScroll?.(event);
+    },
+    300,
+    300
+  );
 
   render(): JSX.Element {
-    const {
-      twoList,
-      isComplete,
-      innerScrollTop,
-    } = this.state
+    const { twoList, isComplete, innerScrollTop } = this.state;
     const {
       segmentNum,
       scrollViewProps,
       onRenderTop,
+      onRenderTopTop,
       onRenderBottom,
       onRender,
       onRenderLoad,
       listId,
       className,
       autoScrollTop,
-    } = this.props
+    } = this.props;
 
     const scrollStyle = {
-      height: '100%',
-    }
+      height: "100%",
+    };
 
     const _scrollViewProps = {
       ...scrollViewProps,
-      scrollTop: autoScrollTop ? (innerScrollTop === 0 ? 0 : "") : scrollViewProps?.scrollTop,
-    }
+      scrollTop: autoScrollTop
+        ? innerScrollTop === 0
+          ? 0
+          : ""
+        : scrollViewProps?.scrollTop,
+    };
 
     return (
       <ScrollView
@@ -457,41 +515,42 @@ export default class VirtialList extends Component<VirtualListProps, VirtualList
         onScroll={this.handleScroll}
       >
         <View className="zt-scroll-content">
-          {onRenderTop?.()}
-          <View className="zt-main-list">
-            {
-              twoList?.map((item, pageIndex) => {
+          {onRenderTopTop?.()}
+          <View id={"content"}>
+            {onRenderTop?.()}
+            <View className="zt-main-list">
+              {twoList?.map((item, pageIndex) => {
                 return (
-                  <View key={pageIndex} data-index={pageIndex} className={`zt-wrap-item wrap_${pageIndex}`}>
-                    {
-                      item?.length > 0 ? (
-                        <Block>
-                          {
-                            item.map((el, index) => {
-                              return onRender?.(el, (pageIndex * segmentNum + index), pageIndex)
-                            })
-                          }
-                        </Block>
-                      ) : (
-                        <View style={{'height': `${item?.height}px`}}></View>
-                      )
-                    }
+                  <View
+                    key={pageIndex}
+                    data-index={pageIndex}
+                    className={`zt-wrap-item wrap_${pageIndex}`}
+                  >
+                    {item?.length > 0 ? (
+                      <Block>
+                        {item.map((el, index) => {
+                          return onRender?.(
+                            el,
+                            pageIndex * segmentNum + index,
+                            pageIndex
+                          );
+                        })}
+                      </Block>
+                    ) : (
+                      <View style={{ height: `${item?.height}px` }}></View>
+                    )}
                   </View>
-                )
-              })
-            }
+                );
+              })}
+            </View>
           </View>
-          {
-            onRenderLoad?.() && (
-              <View className="zt-loading-text">
-                {onRenderLoad()}
-              </View>
-            )
-          }
+          {onRenderLoad?.() && (
+            <View className="zt-loading-text">{onRenderLoad()}</View>
+          )}
           {isComplete && onRenderBottom?.()}
         </View>
       </ScrollView>
-    )
+    );
   }
 }
 
@@ -499,16 +558,16 @@ VirtialList.defaultProps = {
   list: [],
   pageNum: 1,
   listId: "zt-virtial-list",
-  listType: 'single',
+  listType: "single",
   segmentNum: 10,
   screenNum: 2,
   scrollViewProps: {},
   className: "",
   autoScrollTop: true,
   onRender: function render() {
-    return (<View />)
+    return <View />;
   },
-}
+};
 
 VirtialList.propTypes = {
   list: PropTypes.array.isRequired,
@@ -524,4 +583,4 @@ VirtialList.propTypes = {
   onRenderTop: PropTypes.func,
   onRenderBottom: PropTypes.func,
   onGetScrollData: PropTypes.func,
-}
+};

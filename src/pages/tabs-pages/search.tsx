@@ -5,9 +5,9 @@ import SearchInput from "@/ui/search-input";
 import Title from "@/ui/title";
 import { searchCat } from "@/lib/miao-api/cat";
 import emptyIcon from "@/public/icon/empty.svg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CatList, SearchResult } from "@/lib/miao-api/type";
-import { getStatusBarHeight, isBlank } from "@/lib/util";
+import { isBlank } from "@/lib/util";
 import { CardXL } from "@/ui/cards";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/redux/store";
@@ -16,20 +16,15 @@ import { navigateTo } from "@tarojs/taro";
 import { config } from "@/lib/config";
 import SvgIcon from "@/ui/svg-icon";
 
+// TODO: 修复在已有前搜索结果的情况下 再搜索结果为空时 不会清空屏幕上上次的搜索结果
+
 export default function Search() {
   const [data, setData] = useState<SearchResult[]>([]);
   const [query, setQuery] = useState("");
   const [isEmpty, setIsEmpty] = useState(false);
-  const [topHeight, setTopHeight] = useState(0);
   const [pageNum, setPageNum] = useState(1);
   const batchCount = 20;
   const fileUrl = useSelector((state: RootState) => state.login.data?.fileUrl);
-  useEffect(() => {
-    const getTopHeight = async () => {
-      setTopHeight((await getStatusBarHeight()).full);
-    };
-    getTopHeight();
-  }, []);
 
   const handleSearch = useDebouncedCallback((term: string) => {
     const search = async (q: string) => {
@@ -37,7 +32,7 @@ export default function Search() {
         setIsEmpty(false);
         return;
       }
-      console.log(`searching ${term}`);
+      console.log(`searching ${q}`);
       const result = await searchCat(q);
       setIsEmpty(result.length === 0);
       setData(result);
@@ -50,14 +45,12 @@ export default function Search() {
   const topElement = () => {
     return (
       <>
-        <PaddingBlock />
         <Title className={"mb-3"}>搜索</Title>
-        <div className={"sticky mb-3 z-50"} style={{ top: topHeight }}>
-          <SearchInput
-            placeholder={"猫猫名字、描述、标签和其他内容"}
-            onInput={(e) => handleSearch(e.detail.value)}
-          />
-        </div>
+        <SearchInput
+          className={"mb-3"}
+          placeholder={"猫猫名字、描述、标签和其他内容"}
+          onInput={(e) => handleSearch(e.detail.value)}
+        />
       </>
     );
   };
@@ -65,6 +58,7 @@ export default function Search() {
   const renderItem = (item: CatList, _index: number, _pageIndex: number) => {
     return (
       <CardXL
+        key={item.id}
         title={item.name}
         desc={item.description}
         src={`${fileUrl}/${item.coverPhoto?.fileName}`}
@@ -72,6 +66,10 @@ export default function Search() {
         onClick={() => handleCatClick(item.id)}
       />
     );
+  };
+
+  const topTopElement = () => {
+    return <PaddingBlock />;
   };
 
   const bottomElement = () => {
@@ -106,10 +104,8 @@ export default function Search() {
 
   return (
     <TopbarProvider
-      observeTargetSelector={".zt-main-list"}
-      heightOffset={50}
+      observeTargetSelector={"content"}
       title={"搜索"}
-      defaultHidden
       topClassName={"bg-primary-100"}
       className={"bg-primary-100"}
     >
@@ -133,6 +129,7 @@ export default function Search() {
         }}
         onRender={renderItem}
         onRenderTop={topElement}
+        onRenderTopTop={topTopElement}
         onRenderBottom={bottomElement}
       />
     </TopbarProvider>

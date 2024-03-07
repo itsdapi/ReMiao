@@ -4,14 +4,11 @@ import searchIcon from "@/public/icon/search.svg";
 
 export default function SearchInput(props: InputProps) {
   return (
-    <div className={"bg-gray-200/90 rounded-lg flex flex-row p-2 items-center"}>
-      <SvgIcon
-        src={searchIcon}
-        color={"grey"}
-        size={16}
-        className={"pr-2 w-fit"}
-      />
-      <Input {...props} className={"w-full"} />
+    <div
+      className={`bg-gray-200/90 rounded-lg flex flex-row p-2 items-center z-50 ${props.className}`}
+    >
+      <SvgIcon src={searchIcon} color={"grey"} size={24} className={"w-fit"} />
+      <Input {...props} className={"pl-2 w-full"} />
     </div>
   );
 }
