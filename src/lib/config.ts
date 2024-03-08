@@ -4,7 +4,14 @@ export const config = {
   },
   app: {
     indexPagePath: "/pages/tabs-pages/index",
+    aboutPagePath: "/pages/tabs-pages/about",
     catDetailPath: "/pages/none-tabs-pages/cat-detail",
+    articleDetailPath: "/pages/none-tabs-pages/article-detail",
+    loginPath: "/pages/none-tabs-pages/login",
+    contactPath: "/pages/none-tabs-pages/contact",
+    meHelpPath: "/pages/none-tabs-pages/me-help",
+    settingPath: "/pages/none-tabs-pages/setting",
+    teamWordPath: "/pages/none-tabs-pages/team-word",
     tabbarHeight: 5,
     title: "莞工猫猫图鉴",
     // 颜色配置指南
@@ -24,6 +31,7 @@ export const config = {
         700: "#9A8C78",
         600: "#BFB09C",
         500: "#F2E3D0",
+        100: "#F5F4EE",
       },
       tertiary: {
         900: "#300406",

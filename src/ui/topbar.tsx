@@ -6,6 +6,7 @@ import {
 } from "@/lib/util";
 import { TopHeightReturnType } from "@/lib/type";
 import { Back } from "@/ui/button/button";
+import Loading from "@/ui/loading";
 
 interface TopbarProps
   extends React.DetailedHTMLProps<
@@ -18,11 +19,13 @@ interface TopbarProps
   heightOffset?: number;
   defaultHidden?: boolean;
   topClassName?: string;
+  loading?: boolean;
 }
 
 export default function TopbarProvider(props: TopbarProps) {
   const [blockBarShow, setBlockBarShow] = useState<boolean>(false);
   const isPreview = getEnvMode() === "development";
+  // const isPreview = false;
   const [height, setHeight] = useState<TopHeightReturnType>({
     full: 0,
     menu: 0,
@@ -71,12 +74,17 @@ export default function TopbarProvider(props: TopbarProps) {
           {props.back && <Back />}
           <h1
             className={`w-fit mx-auto absolute bottom-0 inset-x-0 text-center
-            transition-opacity duration-200 font-light
+            transition-opacity duration-200 font-light flex justify-start gap-2
             ${blockBarShow ? "opacity-100" : "opacity-0"}
             ${isPreview ? "bg-red-300 px-4 py-1 rounded-full" : ""}
             `}
           >
+            <div style={{ height: 20, width: 20 }} />
             {props.title}
+            <Loading
+              loading={props.loading ? props.loading : false}
+              size={20}
+            />
           </h1>
         </div>
       </div>

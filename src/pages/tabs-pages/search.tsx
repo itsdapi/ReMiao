@@ -104,7 +104,7 @@ export default function Search() {
 
   return (
     <TopbarProvider
-      observeTargetSelector={"content"}
+      observeTargetSelector={"#content"}
       title={"搜索"}
       topClassName={"bg-primary-100"}
       className={"bg-primary-100"}

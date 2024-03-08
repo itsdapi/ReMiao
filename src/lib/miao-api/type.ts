@@ -90,3 +90,12 @@ export interface UploadTokenRespond {
   url: string;
   params: object;
 }
+
+export interface ArticleList {
+  id: number;
+  coverPhoto: CoverPhoto;
+  summary: string;
+  title: string;
+  url: string;
+  createdDate: Date;
+}

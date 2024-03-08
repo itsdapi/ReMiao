@@ -13,23 +13,27 @@ import { Tag } from "@/lib/type";
 import { navigateTo } from "@tarojs/taro";
 import { PaddingBottom, PaddingBlock } from "@/ui/padding-block";
 import { isShowNotification } from "@/lib/util";
+import { useFetchInfinite } from "@/lib/hook";
+
+// 指定一次获取列表多少项
+const batchCount = 10;
+const getKey = (pageNum: number) => {
+  return { limit: batchCount, offset: pageNum * batchCount };
+};
 
 export default function Index() {
   const fileUrl = useSelector((state: RootState) => state.login.data?.fileUrl);
-  const batchCount = 20;
-  const [pageNum, setPageNum] = useState(1);
   const [NotifShow, setNotifShow] = useState(true);
-  const [data, setData] = useState<any[]>([]);
-  useEffect(() => {
-    const initData = async () => {
-      setData(await getCatList(batchCount, 0));
-    };
+  const { data, pageNum, nextPage, loading } = useFetchInfinite(
+    getKey,
+    getCatList
+  );
 
+  useEffect(() => {
     const notificationShouldPop = async () => {
       setNotifShow(await isShowNotification(notification.id));
     };
 
-    initData();
     notificationShouldPop();
     // eslint-disable-next-line
   }, []);
@@ -78,10 +82,7 @@ export default function Index() {
 
   const handleScrollToLower = async () => {
     // console.log(`trigger load data pageNum: ${pageNum}`);
-    const newData = await getCatList(batchCount, pageNum * batchCount);
-    if (newData.length === 0) return;
-    setData(data.concat(newData));
-    setPageNum(pageNum + 1);
+    nextPage();
   };
 
   const handleCatClick = (id: number) => {
@@ -108,6 +109,7 @@ export default function Index() {
       observeTargetSelector={"#content"}
       topClassName={"bg-primary-100"}
       className={"bg-primary-100"}
+      loading={loading}
     >
       <VirtialList
         className={"mx-auto container"}

@@ -4,7 +4,7 @@ import { MIAO_API_LOGIN_PATH } from "@/lib/static";
 import { ErrorDisplayType, RequestError, RequestType } from "@/lib/type";
 import {
   errorHandler,
-  getRuntime,
+  getLocalRuntime,
   login,
   request,
   uploadFile,
@@ -103,13 +103,22 @@ async function getToken(isNew?: boolean) {
     console.log("Requesting a new Token");
     await store.dispatch(actionFetchLoginData());
   }
+  const reduxRuntime = await getRuntime();
 
+  return reduxRuntime.userData.token;
+}
+
+export async function getFileUrl() {
+  return (await getRuntime()).fileUrl;
+}
+
+async function getRuntime() {
   // 首先会尝试从Redux中获取运行时
   let reduxRuntime = store.getState().login.data;
   // console.log("reduxRuntime", reduxRuntime);
   if (!reduxRuntime) {
     // 如果Redux中没有就去localStorage中拿
-    const localRuntime = await getRuntime();
+    const localRuntime = await getLocalRuntime();
     // console.log("localRuntime", localRuntime);
     if (!localRuntime) {
       // 如果localStorage也是空的话 就是第一次登陆 需要执行miaoLogin()
@@ -125,5 +134,5 @@ async function getToken(isNew?: boolean) {
     // 如果这样都无法获取Token的话那就是出问题了
     throw new Error("Fail to get token!");
   }
-  return reduxRuntime.userData.token;
+  return reduxRuntime;
 }

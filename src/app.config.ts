@@ -11,7 +11,6 @@ export default defineAppConfig({
   //   },
   // },
   pages: [
-    // "pages/login",
     "pages/tabs-pages/index",
     "pages/tabs-pages/article",
     "pages/tabs-pages/about",
@@ -19,6 +18,11 @@ export default defineAppConfig({
     "pages/error",
     "pages/none-tabs-pages/cat-detail",
     "pages/none-tabs-pages/article-detail",
+    "pages/none-tabs-pages/login",
+    "pages/none-tabs-pages/team-word",
+    "pages/none-tabs-pages/me-help",
+    "pages/none-tabs-pages/setting",
+    "pages/none-tabs-pages/contact",
   ],
   tabBar: {
     list: routes,

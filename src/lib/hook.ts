@@ -1,37 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-export function useFetch<T>(
-  fetchFn: (params: any) => Promise<T>,
-  params?: any,
-  displayResult?: boolean
-) {
-  const [data, setData] = useState<T>();
-  const [loading, setLoading] = useState(false);
-  const [newParams, setNewParams] = useState(params);
-  const fetchCall = useCallback(async () => {
-    // console.log("useCallback");
-    const res = await fetchFn(newParams);
-    if (displayResult) console.log("useFetch", res);
-    setLoading(true);
-    setData(res);
-    setLoading(false);
-  }, [fetchFn, newParams]);
-
-  useEffect(() => {
-    // console.log("useEffect");
-    fetchCall();
-  }, [fetchCall]);
-
-  const doFetch = useCallback((rest: any) => setNewParams(rest), []);
-  const reFetch = () => setNewParams(Object.assign({}, newParams));
-  return {
-    data,
-    loading,
-    doFetch,
-    reFetch,
-  };
-}
-
 /**
  * 传入页面的params 传入想要的params 就能返回params object
  * @param pageParams 页面第一层params 要包含tid
@@ -53,4 +21,56 @@ export function useParams<T extends string>(
       return acc;
     }, {} as { [K in T]?: string });
   }, [pageParams, paramNames]);
+}
+
+interface UFIProps {
+  debug?: boolean;
+}
+/**
+ * 封装无限滚动列表请求钩子
+ * 用法：
+ * getKey接受pageNum,其返回值会传入fetcher作为请求参数
+ * @param getKey
+ * @param fetcher
+ * @param option
+ */
+export function useFetchInfinite<K, T>(
+  getKey: (pageNum: number) => K,
+  fetcher: (key: K) => Promise<T[]>,
+  option?: UFIProps
+) {
+  const [pageNum, setPageNum] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [end, setEnd] = useState(false);
+  const [data, setData] = useState<T[]>([]);
+  const fetchCall = useCallback(async () => {
+    const key = getKey(pageNum - 1);
+    setLoading(true);
+    const res = await fetcher(key);
+    if (option?.debug) console.log(`Page ${pageNum}, result`, res);
+    if (res.length === 0) {
+      setEnd(true);
+      setLoading(false);
+      return;
+    }
+    setData(data.concat(res));
+    setLoading(false);
+  }, [pageNum]);
+
+  useEffect(() => {
+    // console.log("useEffect");
+    fetchCall();
+  }, [fetchCall]);
+
+  const nextPage = useCallback(() => {
+    if (end) return;
+    setPageNum(pageNum + 1);
+  }, [pageNum]);
+
+  return {
+    data,
+    pageNum,
+    nextPage,
+    loading,
+  };
 }

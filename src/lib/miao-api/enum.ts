@@ -17,3 +17,10 @@ export enum CatStatus {
   "猫星",
   "未知",
 }
+
+export enum UserRole {
+  "禁用中",
+  "未注册",
+  "铲屎官",
+  "管理员",
+}

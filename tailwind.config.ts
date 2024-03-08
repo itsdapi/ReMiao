@@ -24,6 +24,7 @@ export default {
       },
       boxShadow: {
         bb: "0rem 0.9375rem 1.25rem 0.46875rem rgba(208, 196, 183, 0.397)",
+        bt: "0rem -0.9rem 1.25rem 0.46875rem rgba(208, 196, 183, 0.197)",
       },
       fontSize: {
         plus: ["0.99rem", "1.5rem"],

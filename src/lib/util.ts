@@ -38,14 +38,14 @@ export async function getStatusBarHeight(): Promise<TopHeightReturnType> {
   };
 }
 
-export async function writeRuntime(config: AppRuntime) {
+export async function writeLocalRuntime(config: AppRuntime) {
   console.log("writing runtime");
   const serialized = JSON.stringify(config);
   setStorageSync("runtime", serialized);
   console.log("Runtime saved!");
 }
 
-export async function getRuntime() {
+export async function getLocalRuntime() {
   try {
     const serialized = await getStorageSync("runtime");
     if (!serialized) {

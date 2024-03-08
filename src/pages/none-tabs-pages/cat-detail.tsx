@@ -8,7 +8,10 @@ import { CatStatus } from "@/lib/miao-api/enum";
 import { KVInfo } from "@/ui/info";
 import { RoundBtn } from "@/ui/button/button";
 import Tag from "@/ui/tag";
-import { useFetch, useParams } from "@/lib/hook";
+import { useParams } from "@/lib/hook";
+import useSWR from "swr";
+import MySuspense from "@/ui/my-suspense";
+import { CatDetailSkeleton } from "@/ui/skeleton";
 
 definePageConfig({
   navigationBarTitleText: "猫咪",
@@ -18,7 +21,8 @@ definePageConfig({
 
 export default function CatDetail(param: any) {
   const params = useParams(param, ["id"]);
-  const { data } = useFetch(getCatDetail, params.id);
+  // const { data } = useFetch(getCatDetail, params.id);
+  const { data, isLoading } = useSWR(params.id, (id) => getCatDetail(id));
 
   useShareAppMessage((): ShareAppMessageReturn => {
     return {
@@ -35,43 +39,46 @@ export default function CatDetail(param: any) {
       topClassName={"bg-primary-100"}
     >
       <PaddingBlock />
-      <PortraitScrollList
-        photos={data?.selectedPhotos.concat(data?.coverPhoto)}
-      />
-      <div
-        className={
-          "flex flex-col justify-center items-center mt-5 mx-10 space-y-5"
-        }
-      >
-        <h1 className={"text-2xl font-thin"}>{data?.info.name}</h1>
+      <MySuspense loading={isLoading} fallback={<CatDetailSkeleton />}>
+        <PortraitScrollList
+          photos={data?.selectedPhotos.concat(data?.coverPhoto)}
+        />
         <div
           className={
-            "flex flex-col flex-wrap justify-between align-middle gap-5 w-full"
+            "flex flex-col justify-center items-center mt-5 mx-10 space-y-5"
           }
         >
-          {/*这样布局让前3个KV单独一列 然后让容易比较长的单独一列*/}
-          <div className={"flex flex-row flex-wrap gap-5 justify-between"}>
-            <KVInfo title={"毛色"} value={data?.info.species} />
-            <KVInfo
-              title={"状态"}
-              value={CatStatus[data?.info.status ? data.info.status : 6]}
-            />
-            <KVInfo
-              title={"是否绝育"}
-              value={data?.info.isNeuter ? "是" : "否"}
-            />
+          <h1 className={"text-2xl font-thin"}>{data?.info.name}</h1>
+          <div
+            className={
+              "flex flex-col flex-wrap justify-between align-middle gap-5 w-full"
+            }
+          >
+            {/*这样布局让前3个KV单独一列 然后让容易比较长的单独一列*/}
+            <div className={"flex flex-row flex-wrap gap-5 justify-between"}>
+              <KVInfo title={"毛色"} value={data?.info.species} />
+              <KVInfo
+                title={"状态"}
+                value={CatStatus[data?.info.status ? data.info.status : 6]}
+              />
+              <KVInfo
+                title={"是否绝育"}
+                value={data?.info.isNeuter ? "是" : "否"}
+              />
+            </div>
+            <KVInfo title={"外貌描述"} value={data?.info.description} />
+            <KVInfo title={"出没地点"} value={data?.info.haunt} />
           </div>
-          <KVInfo title={"外貌描述"} value={data?.info.description} />
-          <KVInfo title={"出没地点"} value={data?.info.haunt} />
+          <div className={"w-full flex flex-row flex-wrap gap-3"}>
+            {data?.tags.map((tag) => (
+              <Tag text={`#${tag.name}`} key={tag.id} />
+            ))}
+          </div>
+          <RoundBtn className={"mt-5"}>反馈猫咪信息</RoundBtn>
+
+          <PaddingBottomS />
         </div>
-        <div className={"w-full flex flex-row flex-wrap gap-3"}>
-          {data?.tags.map((tag) => (
-            <Tag text={`#${tag.name}`} key={tag.id} />
-          ))}
-        </div>
-        <RoundBtn className={"mt-5"}>反馈猫咪信息</RoundBtn>
-        <PaddingBottomS />
-      </div>
+      </MySuspense>
     </TopbarProvider>
   );
 }

@@ -1,7 +1,7 @@
 import { getFileUrl } from "@/lib/miao-api/setting";
 import { miaoTokenCall } from "@/lib/miao-api/util";
 import { AppRuntime } from "@/lib/type";
-import { writeRuntime } from "@/lib/util";
+import { writeLocalRuntime } from "@/lib/util";
 
 export async function miaoLogin(): Promise<AppRuntime> {
   console.log("Started to login");
@@ -12,7 +12,7 @@ export async function miaoLogin(): Promise<AppRuntime> {
     userData: userData,
     fileUrl: fileUrl,
   };
-  await writeRuntime(runtime);
+  await writeLocalRuntime(runtime);
   console.log("Login success!");
   return runtime;
 }

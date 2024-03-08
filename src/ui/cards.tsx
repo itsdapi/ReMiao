@@ -4,6 +4,7 @@ import Close from "@/public/icon/close.svg";
 import { Image as TaroImage } from "@tarojs/components";
 import { Dispatch, SetStateAction } from "react";
 import { userReadNotification } from "@/lib/util";
+import { config } from "@/lib/config";
 
 interface CardXLProps
   extends React.DetailedHTMLProps<
@@ -90,6 +91,38 @@ export function PortraitCard(props: PortraitCardProps) {
         src={props.src}
         className={"rounded-2xl w-56 h-[19rem] shadow-bb"}
       />
+    </div>
+  );
+}
+
+interface ACProps
+  extends React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLDivElement>,
+    HTMLDivElement
+  > {
+  title: string;
+  desc: string;
+  src: string;
+}
+export function ArticleCard(props: ACProps) {
+  return (
+    <div {...props}>
+      <div
+        className={
+          "rounded-2xl w-full h-40 flex flex-row flex-nowrap bg-white box-border"
+        }
+        style={{ border: `solid 1px ${config.app.colors.secondary["800"]}` }}
+      >
+        <Image
+          ariaLabel={`文章${props.title}封面`}
+          src={props.src}
+          className={"h-full w-4/12 rounded-l-2xl shrink-0"}
+        />
+        <div className={"space-y-2 p-5 text-secondary-900"}>
+          <h1 className={"font-bold text-2xl line-clamp-2"}>{props.title}</h1>
+          <p className={"text-sm line-clamp-3"}>{props.desc}</p>
+        </div>
+      </div>
     </div>
   );
 }

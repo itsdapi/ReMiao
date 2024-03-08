@@ -1,7 +1,7 @@
 import { miaoLogin } from "@/lib/miao-api/login";
 import { AppRuntime } from "@/lib/type";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getRuntime } from "@/lib/util";
+import { getLocalRuntime } from "@/lib/util";
 
 interface loginState {
   data: AppRuntime | null;
@@ -23,7 +23,7 @@ export const actionFetchLoginData = createAsyncThunk(
 );
 
 export const actionLoadLoginData = createAsyncThunk("login/load", async () => {
-  return await getRuntime();
+  return await getLocalRuntime();
 });
 
 export const loginSlice = createSlice({

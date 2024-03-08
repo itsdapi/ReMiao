@@ -35,7 +35,7 @@ const Image = memo(
         }}
       >
         <div
-          className={`animate-blink transition-opacity absolute w-full h-full inset-x-0 inset-y-0 z-50 ${
+          className={`animate-blink transition-opacity absolute w-full h-full inset-x-0 inset-y-0 z-10 ${
             loaded ? "opacity-0" : "opacity-100"
           }`}
         />

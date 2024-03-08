@@ -1,6 +1,5 @@
 import { miaoApiCall } from "@/lib/miao-api/util";
 import { UserInfo } from "@/lib/miao-api/type";
-import { downloadFile } from "@/lib/util";
 import { upload } from "@/lib/miao-api/file";
 
 export async function getCurrentUserInfo() {
@@ -15,15 +14,20 @@ export async function getCurrentUserInfo() {
 
 export async function updateUserInfo({
   nickName,
-  avatarUrl,
+  localAvatarUrl,
 }: {
   nickName: string;
-  avatarUrl: string;
+  localAvatarUrl: string;
 }) {
-  const localAvatarFilePath = await downloadFile(avatarUrl);
-  const avatarFileToken = await upload(localAvatarFilePath, true);
-  return await miaoApiCall("/user", "PUT", {
-    nickName: nickName,
-    avatarFileToken: avatarFileToken,
-  });
+  const avatarFileToken = await upload(localAvatarUrl, true);
+  return await miaoApiCall(
+    "/user",
+    "PUT",
+    {
+      nickName: nickName,
+      avatarFileToken: avatarFileToken,
+    },
+    undefined,
+    "更用户"
+  );
 }

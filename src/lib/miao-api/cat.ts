@@ -1,14 +1,19 @@
 import { CatDetail, CatList, SearchResult } from "@/lib/miao-api/type";
 import { miaoApiCall } from "@/lib/miao-api/util";
 
-export async function getCatList(limit = 20, offset = 0) {
+interface CatListParams {
+  limit: number;
+  offset: number;
+}
+export async function getCatList(params: CatListParams | null) {
+  if (!params) return [];
   const result = (await miaoApiCall(
     "/cats",
     "GET",
     null,
     {
-      limit: limit.toString(),
-      start: offset.toString(),
+      limit: params.limit.toString(),
+      start: params.offset.toString(),
     },
     "猫列表"
   )) as CatList[];
@@ -16,7 +21,7 @@ export async function getCatList(limit = 20, offset = 0) {
   return result;
 }
 
-export async function getCatDetail(id: number) {
+export async function getCatDetail(id: string) {
   const result = (await miaoApiCall(
     `/cat/${id}`,
     "GET",
