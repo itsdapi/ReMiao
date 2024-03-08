@@ -1,10 +1,10 @@
 import { getOrgInfo } from "@/lib/miao-api/setting";
 import { Image, RichText } from "@tarojs/components";
 import HUIHUI from "@/public/image/huihui.svg";
-import { useFetch } from "@/lib/hook";
+import useSWR from "swr";
 
 export default function OrgInfo() {
-  const { data } = useFetch(getOrgInfo, undefined);
+  const { data } = useSWR("fetch org info", getOrgInfo);
 
   return (
     <>
