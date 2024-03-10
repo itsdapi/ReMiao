@@ -19,12 +19,15 @@ export default function Post(params: any) {
   const [medias, setMedias] = useState<ChooseMedia[]>([]);
 
   const handleSend = async () => {
+    console.log(`send!, ${api}`, { input, medias });
+    // 第零步 基础内容检查
+    // 首先输入内容肯定是需要的
     if (isBlank(input)) {
       showToast("输入内容！");
       return;
     }
-    console.log(`send!, ${api}`, { input, medias });
-    let returnMessage = "";
+
+    // 接着是检查图片内容 通过在页面params的requiredImage中传入1代表true 0代表false
     if (medias.length === 0 && Number(requiredImage)) {
       console.log("Image is required!");
       showToast("需要上传图片哦");
@@ -34,16 +37,23 @@ export default function Post(params: any) {
     // 第一步 上传照片
     let tokenList: string[] = [];
     if (medias.length !== 0) {
+      // 组装符合上传格式的Object
       const uploadQueue = medias.map((media) => {
         return { filePath: media.tempFilePath, isCompressed: true };
       });
       console.log("upload queue", uploadQueue);
-      tokenList = await upload(uploadQueue);
+      const result = await upload(uploadQueue);
+      // 有发生错误需要告知用户哪个照片无法上传
+      if (result.errorList.length !== 0)
+        showToast(`${result.errorList.toString()}无法上传`);
+      tokenList = result.tokenList;
     }
 
     // 第二步 发布反馈
+    // 通过向页面传入api参数来指定用哪个api接口
+    // 因为这个页面还可以用来承载发布帖子的功能
     if (api === "feedback") {
-      returnMessage = (
+      const feedbackID = (
         await postFeedback({
           type: feedbackType ? feedbackType : "1",
           catID: Number(catID),
@@ -51,9 +61,10 @@ export default function Post(params: any) {
           content: input,
         })
       ).feedbackID.toString();
+      showToast(`反馈${feedbackID}已收到`, "success");
     }
 
-    showToast(`反馈${returnMessage}已收到`, "success");
+    // 自动返回上一页 等待1秒
     await new Promise((r) => setTimeout(r, 1000));
     goBack();
   };

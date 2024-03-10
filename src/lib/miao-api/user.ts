@@ -19,18 +19,20 @@ export async function updateUserInfo({
   nickName: string;
   localAvatarUrl: string;
 }) {
-  const avatarFileToken = await upload([
-    {
-      filePath: localAvatarUrl,
-      isCompressed: true,
-    },
-  ]);
+  const avatarFileToken = (
+    await upload([
+      {
+        filePath: localAvatarUrl,
+        isCompressed: true,
+      },
+    ])
+  ).tokenList[0];
   return await miaoApiCall(
     "/user",
     "PUT",
     {
       nickName: nickName,
-      avatarFileToken: avatarFileToken[0],
+      avatarFileToken: avatarFileToken,
     },
     undefined,
     "更用户"
