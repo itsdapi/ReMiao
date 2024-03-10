@@ -3,7 +3,7 @@ import { getStatusBarHeight } from "@/lib/util";
 import { config } from "@/lib/config";
 
 export function PaddingBlock() {
-  const [statusBarHeight, setStatusBarHeight] = useState<number>(390);
+  const [statusBarHeight, setStatusBarHeight] = useState<number>(90);
   useEffect(() => {
     const getSafeHeight = async () => {
       setStatusBarHeight((await getStatusBarHeight()).full);
@@ -11,7 +11,12 @@ export function PaddingBlock() {
 
     getSafeHeight();
   }, []);
-  return <div style={{ height: statusBarHeight + 10 }} className={"w-full"} />;
+  return (
+    <div
+      style={{ height: statusBarHeight + 10 }}
+      className={"w-full transition-size ease-out"}
+    />
+  );
 }
 
 export function PaddingBottom({ className }: { className?: string }) {
@@ -23,6 +28,6 @@ export function PaddingBottom({ className }: { className?: string }) {
   );
 }
 
-export function PaddingBottomS() {
-  return <div className={"w-full h-5"} />;
+export function PaddingBottomS({ className }: { className?: string }) {
+  return <div className={`w-full h-5 ${className}`} />;
 }

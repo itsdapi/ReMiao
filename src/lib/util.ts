@@ -1,5 +1,6 @@
 import {
   AppRuntime,
+  ChooseMedia,
   ErrorDisplayType,
   NotificationConfig,
   RequestError,
@@ -13,15 +14,22 @@ import {
   getMenuButtonBoundingClientRect,
   setStorageSync,
   getStorageSync,
+  editImage as TaroEditImage,
+  previewImage as TaroPreviewImage,
   getUserProfile,
   downloadFile as TaroDownloadFile,
   uploadFile as TaroUploadFile,
   navigateTo,
   showToast as TaroShowToast,
+  showActionSheet as TaroShowActionSheet,
   login as TaroLogin,
   request as TaroRequest,
+  chooseMedia as TaroChooseMedia,
+  navigateBack,
+  switchTab,
 } from "@tarojs/taro";
 import { RespondErrorType } from "@/lib/miao-api/type";
+import { config as AppConfig } from "@/lib/config";
 
 /**
  *
@@ -230,4 +238,75 @@ export function uploadFile(
 export function getFileExtName(filePath: string) {
   // console.log("getting ext", filePath);
   return filePath.substring(filePath.indexOf(".") + 1).toLowerCase();
+}
+
+export function chooseMedia(): Promise<ChooseMedia[]> {
+  return new Promise((resolve, reject) => {
+    TaroChooseMedia({
+      mediaType: ["image"],
+      success: (res) => {
+        resolve(res.tempFiles);
+      },
+      fail: (error) => {
+        reject(error);
+      },
+    });
+  });
+}
+
+export function editImage(src: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    TaroEditImage({
+      src: src,
+      success: (res) => {
+        resolve(res.tempFilePath);
+      },
+      fail: (error) => {
+        reject(error);
+      },
+    });
+  });
+}
+
+export function showActionSheet(
+  params: { action: () => void; title: string }[]
+): Promise<number | undefined> {
+  const titles = params.map((item) => item.title);
+  return new Promise((resolve) => {
+    TaroShowActionSheet({
+      itemList: titles,
+      success: (res) => {
+        params[res.tapIndex].action();
+        resolve(res.tapIndex);
+      },
+    });
+  });
+}
+
+export function previewImage(
+  urls: string[],
+  options: { saveImage?: boolean; menu?: boolean; current?: string }
+) {
+  return new Promise((resolve, reject) => {
+    TaroPreviewImage({
+      urls: urls,
+      current: options.current,
+      showmenu: options.menu,
+      enablesavephoto: options.saveImage,
+      enableShowPhotoDownload: options.saveImage,
+      success: resolve,
+      fail: reject,
+    });
+  });
+}
+
+export function goBack() {
+  navigateBack({
+    delta: 1,
+    fail: () => {
+      switchTab({
+        url: AppConfig.app.indexPagePath,
+      });
+    },
+  });
 }

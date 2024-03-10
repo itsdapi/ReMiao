@@ -1,6 +1,7 @@
 import fallbackImage from "@/public/image/default-fallback-image.png";
 import { Image as TaroImage } from "@tarojs/components";
 import { memo, useState } from "react";
+import { previewImage } from "@/lib/util";
 
 const Image = memo(
   ({
@@ -11,6 +12,7 @@ const Image = memo(
     height,
     width,
     children,
+    preview,
   }: {
     children?: React.ReactNode;
     ariaLabel: string;
@@ -19,8 +21,18 @@ const Image = memo(
     style?: React.CSSProperties;
     height?: number;
     width?: number;
+    preview?: boolean;
   }) => {
     const [loaded, setLoaded] = useState<boolean>(false);
+
+    const handleClick = async () => {
+      if (!src || !preview) return;
+      await previewImage([src], {
+        saveImage: true,
+        menu: true,
+      });
+    };
+
     return (
       <TaroImage
         src={src ? src : fallbackImage}
@@ -33,6 +45,7 @@ const Image = memo(
         onLoad={() => {
           setLoaded(true);
         }}
+        onClick={() => handleClick()}
       >
         <div
           className={`animate-blink transition-opacity absolute w-full h-full inset-x-0 inset-y-0 z-10 ${

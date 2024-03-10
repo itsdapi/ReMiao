@@ -7,9 +7,7 @@ import { navigateTo } from "@tarojs/taro";
 import { ListItemType } from "@/lib/type";
 import { config } from "@/lib/config";
 import PhoneIcon from "@/public/icon/phone.svg";
-import EyesIcon from "@/public/icon/eyes.svg";
 import ClapIcon from "@/public/icon/about.svg";
-import SettingIcon from "@/public/icon/settings.svg";
 
 export default function About() {
   const list: ListItemType[] = [
@@ -25,18 +23,12 @@ export default function About() {
       icon: ClapIcon,
       onClick: () => navigateTo({ url: config.app.meHelpPath }),
     },
-    {
-      id: 2,
-      title: "我们想要说的",
-      icon: EyesIcon,
-      onClick: () => navigateTo({ url: config.app.teamWordPath }),
-    },
-    {
-      id: 3,
-      title: "设置",
-      icon: SettingIcon,
-      onClick: () => navigateTo({ url: config.app.settingPath }),
-    },
+    // {
+    //   id: 2,
+    //   title: "设置",
+    //   icon: SettingIcon,
+    //   onClick: () => navigateTo({ url: config.app.settingPath }),
+    // },
   ];
   return (
     <TopbarProvider
@@ -61,6 +53,12 @@ export default function About() {
             icon={item.icon}
           />
         ))}
+        <div
+          className={"text-sm font-light text-center text-secondary-800 mt-8"}
+        >
+          <p>来自莞工爱猫人士 用 ❤️ 制作</p>
+          <p>@喵莞家</p>
+        </div>
       </List>
       <PaddingBottom className={"bg-white"} />
     </TopbarProvider>

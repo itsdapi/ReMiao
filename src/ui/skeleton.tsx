@@ -68,3 +68,22 @@ export function UserInfoSkeleton() {
     </>
   );
 }
+
+export function IndexSkeleton() {
+  return (
+    <div className={"space-y-4 animate-pulse"}>
+      <div className={"h-40 rounded-2xl bg-primary-600"} />
+      <div className={"h-40 rounded-2xl bg-primary-300"} />
+      <div className={"h-40 rounded-2xl bg-primary-200"} />
+    </div>
+  );
+}
+export function ContactSkeleton() {
+  return (
+    <div className={"space-y-4 animate-pulse"}>
+      <div className={"h-50 rounded-2xl bg-primary-600"} />
+      <div className={"h-50 rounded-2xl bg-primary-300"} />
+      <div className={"h-50 rounded-2xl bg-primary-200"} />
+    </div>
+  );
+}

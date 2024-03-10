@@ -1,7 +1,11 @@
 import TopbarProvider from "@/ui/topbar";
 import { PaddingBlock, PaddingBottomS } from "@/ui/padding-block";
 import { getCatDetail } from "@/lib/miao-api/cat";
-import { useShareAppMessage, ShareAppMessageReturn } from "@tarojs/taro";
+import {
+  useShareAppMessage,
+  ShareAppMessageReturn,
+  navigateTo,
+} from "@tarojs/taro";
 import { config } from "@/lib/config";
 import PortraitScrollList from "@/ui/components/portrait-scroll-list";
 import { CatStatus } from "@/lib/miao-api/enum";
@@ -12,6 +16,7 @@ import { useParams } from "@/lib/hook";
 import useSWR from "swr";
 import MySuspense from "@/ui/my-suspense";
 import { CatDetailSkeleton } from "@/ui/skeleton";
+import { URLSearchParams } from "@tarojs/runtime";
 
 definePageConfig({
   navigationBarTitleText: "猫咪",
@@ -20,16 +25,31 @@ definePageConfig({
 });
 
 export default function CatDetail(param: any) {
-  const params = useParams(param, ["id"]);
+  const { id } = useParams(param, ["id"]);
   // const { data } = useFetch(getCatDetail, params.id);
-  const { data, isLoading } = useSWR(params.id, (id) => getCatDetail(id));
+  const { data, isLoading } = useSWR(id, (_id) => getCatDetail(_id));
 
   useShareAppMessage((): ShareAppMessageReturn => {
     return {
       title: data?.info.name,
-      path: `${config.app.catDetailPath}?id=${params?.id}`,
+      path: `${config.app.catDetailPath}?id=${id}`,
     };
   });
+
+  const handleFeedbackClick = () => {
+    const postConfig = {
+      title: "你好！",
+      desc: "请留下您的微信号，我们会第一时间通知你",
+      api: "feedback",
+      catID: id,
+      feedbackType: "0",
+    };
+    const SP = new URLSearchParams(postConfig);
+    const url = `${config.app.postPath}?${SP.toString()}`;
+    navigateTo({
+      url: url,
+    });
+  };
 
   return (
     <TopbarProvider
@@ -74,7 +94,9 @@ export default function CatDetail(param: any) {
               <Tag text={`#${tag.name}`} key={tag.id} />
             ))}
           </div>
-          <RoundBtn className={"mt-5"}>反馈猫咪信息</RoundBtn>
+          <RoundBtn className={"mt-5"} onClick={handleFeedbackClick}>
+            反馈猫咪信息
+          </RoundBtn>
 
           <PaddingBottomS />
         </div>

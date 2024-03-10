@@ -1,10 +1,12 @@
 import Image from "@/ui/image";
 import CatHelp from "@/public/icon/cat_help.svg";
 import Close from "@/public/icon/close.svg";
-import { Image as TaroImage } from "@tarojs/components";
+import { Image as TaroImage, Text } from "@tarojs/components";
 import { Dispatch, SetStateAction } from "react";
 import { userReadNotification } from "@/lib/util";
 import { config } from "@/lib/config";
+import Avatar from "@/ui/avatar";
+import Tag from "@/ui/tag";
 
 interface CardXLProps
   extends React.DetailedHTMLProps<
@@ -123,6 +125,44 @@ export function ArticleCard(props: ACProps) {
           <p className={"text-sm line-clamp-3"}>{props.desc}</p>
         </div>
       </div>
+    </div>
+  );
+}
+
+export function ContactCard({
+  name,
+  email,
+  wx,
+  avatar,
+  tag,
+}: {
+  name: string;
+  email?: string;
+  wx: string;
+  avatar: string;
+  tag: string;
+}) {
+  const Info = ({ title, value }: { title: string; value: string }) => {
+    return (
+      <p className={"flex flex-col justify-center items-center"}>
+        <div className={"text-sm font-bold"}>{title}</div>
+        <Text className={"font-light w-fit"} selectable userSelect>
+          {value}
+        </Text>
+      </p>
+    );
+  };
+  return (
+    <div
+      className={
+        "bg-white flex flex-col items-center justify-center text-secondary-900 rounded-2xl p-5 shadow-bb gap-3"
+      }
+    >
+      <Avatar src={avatar} className={"h-20 w-20"} />
+      <h1 className={"text-2xl font-light"}>{name}</h1>
+      <Tag disable text={tag} />
+      <Info title={"微信"} value={wx} />
+      {email && <Info title={"邮箱"} value={email} />}
     </div>
   );
 }

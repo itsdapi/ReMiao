@@ -19,10 +19,11 @@ export default defineAppConfig({
     "pages/none-tabs-pages/cat-detail",
     "pages/none-tabs-pages/article-detail",
     "pages/none-tabs-pages/login",
-    "pages/none-tabs-pages/team-word",
     "pages/none-tabs-pages/me-help",
     "pages/none-tabs-pages/setting",
     "pages/none-tabs-pages/contact",
+    "pages/none-tabs-pages/debug",
+    "pages/none-tabs-pages/post",
   ],
   tabBar: {
     list: routes,

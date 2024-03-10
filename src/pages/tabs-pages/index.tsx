@@ -14,6 +14,8 @@ import { navigateTo } from "@tarojs/taro";
 import { PaddingBottom, PaddingBlock } from "@/ui/padding-block";
 import { isShowNotification } from "@/lib/util";
 import { useFetchInfinite } from "@/lib/hook";
+import MySuspense from "@/ui/my-suspense";
+import { IndexSkeleton } from "@/ui/skeleton";
 
 // 指定一次获取列表多少项
 const batchCount = 10;
@@ -24,7 +26,7 @@ const getKey = (pageNum: number) => {
 export default function Index() {
   const fileUrl = useSelector((state: RootState) => state.login.data?.fileUrl);
   const [NotifShow, setNotifShow] = useState(true);
-  const { data, pageNum, nextPage, loading } = useFetchInfinite(
+  const { data, pageNum, nextPage, loading, initLoading } = useFetchInfinite(
     getKey,
     getCatList
   );
@@ -67,6 +69,7 @@ export default function Index() {
           />
           <Title>{config.app.title}</Title>
           <TagSelector tags={tags} />
+          <MySuspense loading={initLoading} fallback={<IndexSkeleton />} />
         </div>
       </>
     );

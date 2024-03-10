@@ -41,10 +41,12 @@ export function useFetchInfinite<K, T>(
 ) {
   const [pageNum, setPageNum] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [initLoading, setInitLoading] = useState(false);
   const [end, setEnd] = useState(false);
   const [data, setData] = useState<T[]>([]);
   const fetchCall = useCallback(async () => {
     const key = getKey(pageNum - 1);
+    if (data.length === 0) setInitLoading(true);
     setLoading(true);
     const res = await fetcher(key);
     if (option?.debug) console.log(`Page ${pageNum}, result`, res);
@@ -55,6 +57,7 @@ export function useFetchInfinite<K, T>(
     }
     setData(data.concat(res));
     setLoading(false);
+    setInitLoading(false);
   }, [pageNum]);
 
   useEffect(() => {
@@ -72,5 +75,6 @@ export function useFetchInfinite<K, T>(
     pageNum,
     nextPage,
     loading,
+    initLoading,
   };
 }

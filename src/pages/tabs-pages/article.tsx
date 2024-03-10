@@ -10,6 +10,8 @@ import { navigateTo } from "@tarojs/taro";
 import { config } from "@/lib/config";
 import { getArticleList } from "@/lib/miao-api/article";
 import Title from "@/ui/title";
+import MySuspense from "@/ui/my-suspense";
+import { IndexSkeleton } from "@/ui/skeleton";
 
 // 指定一次获取列表多少项
 const batchCount = 10;
@@ -19,7 +21,7 @@ const getKey = (pageNum: number) => {
 
 export default function Article() {
   const fileUrl = useSelector((state: RootState) => state.login.data?.fileUrl);
-  const { data, pageNum, nextPage, loading } = useFetchInfinite(
+  const { data, pageNum, nextPage, loading, initLoading } = useFetchInfinite(
     getKey,
     getArticleList
   );
@@ -42,7 +44,12 @@ export default function Article() {
   };
 
   const topElement = () => {
-    return <Title className={"mb-3"}>文章</Title>;
+    return (
+      <>
+        <Title className={"mb-3"}>文章</Title>
+        <MySuspense loading={initLoading} fallback={<IndexSkeleton />} />
+      </>
+    );
   };
 
   const renderItem = (

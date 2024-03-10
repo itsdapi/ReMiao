@@ -1,4 +1,4 @@
-import { SettingQuery, Settings } from "@/lib/miao-api/type";
+import { Contact, SettingQuery, Settings } from "@/lib/miao-api/type";
 import { miaoApiCall } from "@/lib/miao-api/util";
 import { ErrorDisplayType } from "@/lib/type";
 
@@ -22,11 +22,17 @@ export async function getSettings(
 export async function getFileUrl(token: string) {
   return (
     await getSettings([{ key: "files.url", nullable: false }], token, "page")
-  )["files.url"];
+  )["files.url"] as string;
 }
 
 export async function getOrgInfo() {
   return (await getSettings([{ key: "introduction", nullable: false }]))[
     "introduction"
-  ];
+  ] as string;
+}
+
+export async function getContactInfo() {
+  return (await getSettings([{ key: "contact", nullable: false }]))[
+    "contact"
+  ] as Contact[];
 }

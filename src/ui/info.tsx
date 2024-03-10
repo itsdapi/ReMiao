@@ -1,3 +1,5 @@
+import { Text } from "@tarojs/components";
+
 export function KVInfo({
   title,
   value,
@@ -8,9 +10,11 @@ export function KVInfo({
   className?: string;
 }) {
   return (
-    <div className={`flex flex-col space-y-2 text-secondary-900 ${className}`}>
+    <div className={`flex flex-col gap-2 text-secondary-900 ${className}`}>
       <h2 className={"font-medium"}>{title}</h2>
-      <span className={"font-light text-sm"}>{value}</span>
+      <Text className={"font-light text-sm"} selectable userSelect>
+        {value}
+      </Text>
     </div>
   );
 }

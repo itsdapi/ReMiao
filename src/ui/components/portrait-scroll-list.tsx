@@ -2,6 +2,7 @@ import { CoverPhoto } from "@/lib/miao-api/type";
 import { PortraitCard } from "@/ui/cards";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/redux/store";
+import { previewImage } from "@/lib/util";
 
 export default function PortraitScrollList({
   photos,
@@ -9,6 +10,17 @@ export default function PortraitScrollList({
   photos?: CoverPhoto[];
 }) {
   const fileUrl = useSelector((state: RootState) => state.login.data?.fileUrl);
+  const handleImageClick = async (currPath: string) => {
+    if (!photos) return;
+    const urls = photos.map((photo) => `${fileUrl}/${photo.fileName}`);
+    // console.log(`previewing current ${currPath}`, urls);
+    await previewImage(urls, {
+      current: currPath,
+      saveImage: true,
+      menu: true,
+    });
+  };
+
   return (
     <div
       className={
@@ -20,6 +32,7 @@ export default function PortraitScrollList({
           src={`${fileUrl}/${photo.fileName}`}
           ariaLabel={"一张猫的图片"}
           key={photo.id}
+          onClick={() => handleImageClick(`${fileUrl}/${photo.fileName}`)}
         />
       ))}
     </div>

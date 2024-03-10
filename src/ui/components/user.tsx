@@ -36,15 +36,25 @@ export default function User() {
   });
 
   const handleUpdateUserInfoClick = async () => {
-    // await updateUserInfo(await getTaroUserInfo());
-    // await mutateUserInfo();
     navigateTo({ url: config.app.loginPath });
   };
 
-  return (
-    <>
-      <div className={"h-[1.7rem]"} />
-      <div className={"shadow-bb rounded-2xl bg-white px-7 relative"}>
+  const NotRegister = () => {
+    return (
+      <div
+        className={
+          "w-full h-full flex flex-col items-center justify-center gap-2"
+        }
+      >
+        <h1 className={"text-2xl font-bold"}>未注册</h1>
+        <Tag text={"注册"} onClick={() => handleUpdateUserInfoClick()} />
+      </div>
+    );
+  };
+
+  const Register = () => {
+    return (
+      <>
         <div className={""} style={{ transform: "translateY(-1.7rem)" }}>
           {userInfo && (
             <Avatar
@@ -110,6 +120,15 @@ export default function User() {
             )}
           </div>
         </MySuspense>
+      </>
+    );
+  };
+
+  return (
+    <>
+      <div className={"h-[1.7rem]"} />
+      <div className={"shadow-bb rounded-2xl bg-white px-7 relative"}>
+        {userInfo?.role === "1" ? <NotRegister /> : <Register />}
       </div>
     </>
   );

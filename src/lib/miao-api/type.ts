@@ -32,7 +32,7 @@ export interface SettingQuery {
 }
 
 export interface Settings {
-  [key: string]: string;
+  [key: string]: any;
 }
 
 export interface RespondErrorType {
@@ -98,4 +98,16 @@ export interface ArticleList {
   title: string;
   url: string;
   createdDate: Date;
+}
+
+export interface Contact {
+  avatarFileName: string;
+  name: string;
+  tag: string;
+  wx: string;
+  email?: string;
+}
+
+export interface FeedbackReturn {
+  feedbackID: number;
 }

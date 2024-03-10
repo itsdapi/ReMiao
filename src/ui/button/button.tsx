@@ -2,8 +2,7 @@ import { View } from "@tarojs/components";
 import { ReactNode } from "react";
 import SvgIcon from "@/ui/svg-icon";
 import BackIcon from "@/public/icon/back.svg";
-import { navigateBack, switchTab } from "@tarojs/taro";
-import { config } from "@/lib/config";
+import { goBack } from "@/lib/util";
 import "./button.css";
 
 export function RoundBtn({
@@ -30,14 +29,7 @@ export function RoundBtn({
 
 export function Back() {
   const handleBackClick = () => {
-    navigateBack({
-      delta: 1,
-      fail: () => {
-        switchTab({
-          url: config.app.indexPagePath,
-        });
-      },
-    });
+    goBack();
   };
 
   return (

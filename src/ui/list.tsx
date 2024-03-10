@@ -37,9 +37,9 @@ export function ListItem(props: ListItemProps) {
         <SvgIcon
           src={props.icon}
           color={config.app.colors.secondary["900"]}
-          size={32}
+          size={28}
         />
-        <p className={"text-secondary-900 font-light text-xl"}>{props.title}</p>
+        <p className={"text-secondary-900 font-light text-lg"}>{props.title}</p>
       </div>
     </div>
   );

@@ -18,6 +18,7 @@ export default {
       transitionProperty: {
         fadeGlass: "backgound-color backdrop-filter -webkit-backdrop-filter",
         opacity: "opacity",
+        size: "height width",
       },
       aspectRatio: {
         portrait: "2/1",

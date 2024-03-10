@@ -1,5 +1,6 @@
 import { getOrgInfo } from "@/lib/miao-api/setting";
-import { Image, RichText } from "@tarojs/components";
+import { RichText } from "@tarojs/components";
+import Image from "@/ui/image";
 import HUIHUI from "@/public/image/huihui.svg";
 import useSWR from "swr";
 
@@ -15,6 +16,7 @@ export default function OrgInfo() {
         }
       >
         <Image
+          ariaLabel={"组织会徽"}
           src={HUIHUI}
           className={"h-36 w-36 shadow-bb rounded-full"}
           style={{ transform: "translateY(-3rem)" }}

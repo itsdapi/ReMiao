@@ -5,7 +5,7 @@ export default function MySuspense({
   loading,
   fallback,
 }: {
-  children: ReactNode;
+  children?: ReactNode;
   loading: boolean;
   fallback: ReactNode;
 }) {

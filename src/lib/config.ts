@@ -11,7 +11,8 @@ export const config = {
     contactPath: "/pages/none-tabs-pages/contact",
     meHelpPath: "/pages/none-tabs-pages/me-help",
     settingPath: "/pages/none-tabs-pages/setting",
-    teamWordPath: "/pages/none-tabs-pages/team-word",
+    debugPath: "/pages/none-tabs-pages/debug",
+    postPath: "/pages/none-tabs-pages/post",
     tabbarHeight: 5,
     title: "莞工猫猫图鉴",
     // 颜色配置指南
