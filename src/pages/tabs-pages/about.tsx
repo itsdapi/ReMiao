@@ -58,7 +58,7 @@ export default function About() {
         >
           <p>来自莞工爱猫人士 用 ❤️ 制作</p>
           <p>@喵莞家</p>
-          <p>v{config.app.version}</p>
+          <p>{`v${config.app.version} ${config.app.build}`}</p>
         </div>
       </List>
       <PaddingBottom className={"bg-white"} />

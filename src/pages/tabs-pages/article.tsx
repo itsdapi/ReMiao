@@ -92,6 +92,7 @@ export default function Article() {
           lowerThreshold: 30,
           enhanced: true,
           showScrollbar: false,
+          enableBackToTop: true,
           onScrollToLower: handleScrollToLower,
         }}
         onRender={renderItem}

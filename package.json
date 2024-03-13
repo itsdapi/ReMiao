@@ -1,6 +1,6 @@
 {
   "name": "ReMiao",
-  "version": "1.0.0",
+  "version": "1.0.1 Nijika",
   "private": true,
   "description": "DGUT Miao Pictorial Book App",
   "templateInfo": {
@@ -10,7 +10,7 @@
     "framework": "React"
   },
   "scripts": {
-    "build:weapp": "taro build --type weapp",
+    "build:weapp": "node ./scripts/build_weapp.mjs",
     "build:swan": "taro build --type swan",
     "build:alipay": "taro build --type alipay",
     "build:tt": "taro build --type tt",
@@ -20,7 +20,7 @@
     "build:jd": "taro build --type jd",
     "build:quickapp": "taro build --type quickapp",
     "build:harmony-hybrid": "taro build --type harmony-hybrid",
-    "dev:weapp": "npm run build:weapp -- --watch",
+    "dev:weapp": "taro build --type weapp --watch",
     "dev:swan": "npm run build:swan -- --watch",
     "dev:alipay": "npm run build:alipay -- --watch",
     "dev:tt": "npm run build:tt -- --watch",
@@ -60,7 +60,9 @@
     "@tarojs/shared": "3.6.23",
     "@tarojs/taro": "3.6.23",
     "abortcontroller-polyfill": "^1.7.5",
+    "build-number-generator": "^2.0.4",
     "clsx": "^2.1.0",
+    "cross-env": "^7.0.3",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-icons": "^5.0.1",

@@ -24,6 +24,8 @@ export default defineAppConfig({
     "pages/none-tabs-pages/contact",
     "pages/none-tabs-pages/debug",
     "pages/none-tabs-pages/post",
+    "pages/management-pages/index",
+    "pages/management-pages/cat",
   ],
   tabBar: {
     list: routes,

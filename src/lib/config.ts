@@ -14,7 +14,8 @@ export const config = {
     debugPath: "/pages/none-tabs-pages/debug",
     postPath: "/pages/none-tabs-pages/post",
     tabbarHeight: 5,
-    version: "1.0.2(Preview)",
+    version: process.env.TARO_APP_VERSION,
+    build: process.env.TARO_APP_BUILD,
     title: "莞工猫猫图鉴",
     // 颜色配置指南
     // 除了需要修改这里的颜色之外 还需要修改两处地方 一处是app.css 这个负责顶部状态栏的颜色

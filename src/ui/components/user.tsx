@@ -43,10 +43,10 @@ export default function User() {
     return (
       <div
         className={
-          "w-full h-full flex flex-col items-center justify-center gap-2"
+          "w-full h-full flex flex-col items-center justify-center gap-2 py-12"
         }
       >
-        <h1 className={"text-2xl font-bold"}>未注册</h1>
+        <h1 className={"text-2xl font-bold text-secondary-900"}>未注册</h1>
         <Tag text={"注册"} onClick={() => handleUpdateUserInfoClick()} />
       </div>
     );

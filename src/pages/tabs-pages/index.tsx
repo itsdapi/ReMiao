@@ -130,6 +130,7 @@ export default function Index() {
           lowerThreshold: 30,
           enhanced: true,
           showScrollbar: false,
+          enableBackToTop: true,
           onScrollToLower: handleScrollToLower,
         }}
         onRender={renderItem}
