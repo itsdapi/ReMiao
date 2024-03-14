@@ -43,8 +43,11 @@ export async function upload(
 }
 
 export async function getUploadToken(type: "0" | "1", extName: string) {
-  return (await miaoApiCall("/files", "POST", {
-    type: type,
-    extName: extName,
+  return (await miaoApiCall("/files", {
+    method: "POST",
+    body: {
+      type: type,
+      extName: extName,
+    },
   })) as UploadTokenRespond;
 }

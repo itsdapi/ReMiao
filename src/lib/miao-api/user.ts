@@ -3,13 +3,10 @@ import { UserInfo } from "@/lib/miao-api/type";
 import { upload } from "@/lib/miao-api/file";
 
 export async function getCurrentUserInfo() {
-  return (await miaoApiCall(
-    "/user",
-    "GET",
-    null,
-    undefined,
-    "取用户"
-  )) as UserInfo;
+  return (await miaoApiCall("/user", {
+    method: "GET",
+    apiName: "取用户",
+  })) as UserInfo;
 }
 
 export async function updateUserInfo({
@@ -27,14 +24,12 @@ export async function updateUserInfo({
       },
     ])
   ).tokenList[0];
-  return await miaoApiCall(
-    "/user",
-    "PUT",
-    {
+  return await miaoApiCall("/user", {
+    method: "PUT",
+    body: {
       nickName: nickName,
       avatarFileToken: avatarFileToken,
     },
-    undefined,
-    "更用户"
-  );
+    apiName: "更用户",
+  });
 }

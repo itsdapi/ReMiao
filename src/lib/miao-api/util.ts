@@ -27,30 +27,42 @@ export async function miaoTokenCall() {
   }
 }
 
+interface miaoApiCallOption {
+  // 请求方法
+  method?: RequestType;
+  // 请求body数据
+  body?: { [key: string]: any } | null;
+  // 请求url参数
+  params?: {
+    [key: string]: string;
+  };
+  // 请求api名字 3个字
+  apiName?: string;
+  // 覆盖获取token的方式 用于未登陆的时候直接调用
+  overwriteToken?: string;
+  // 重试次数 修改本函数的默认值来调整重试次数 设置为0时终结
+  times?: number;
+  // 决定出错的展示效果 'page' 会跳转到错误页面 这样或许能让用户认为app坏了hhh
+  errorHandleType?: ErrorDisplayType;
+}
+
 /**
  *
  * @param path api路径
- * @param method 请求方法
- * @param body 请求body数据
- * @param params 请求url参数
- * @param apiName api名字 3个字
- * @param overwriteToken 覆盖获取token的方式 用于未登陆的时候直接调用
- * @param times 重试次数 修改本函数的默认值来调整重试次数 设置为0时终结
- * @param errorHandleType 决定出错的展示效果 'page' 会跳转到错误页面 这样或许能让用户认为app坏了hhh
- * @returns
+ * @param options 选项
+ * @return
  */
-export async function miaoApiCall(
-  path: string,
-  method: RequestType,
-  body: { [key: string]: any } | null,
-  params?: {
-    [key: string]: string;
-  },
-  apiName?: string,
-  overwriteToken?: string,
-  times = 1,
-  errorHandleType?: ErrorDisplayType
-) {
+export async function miaoApiCall(path: string, options?: miaoApiCallOption) {
+  const times = options?.times ? options?.times : 1;
+  const method = options?.method ? options?.method : "GET";
+  const body = options?.body ? options?.body : null;
+  const params = options?.params;
+  const apiName = options?.apiName ? options?.apiName : "请求";
+  const errorHandleType = options?.errorHandleType
+    ? options.errorHandleType
+    : "toast";
+  const overwriteToken = options?.overwriteToken;
+
   // await miaoLogin();
   const searchParams = new URLSearchParams(params);
   let token = overwriteToken ? overwriteToken : await getToken();
@@ -68,15 +80,15 @@ export async function miaoApiCall(
     if (error instanceof RequestError) {
       if (error.status === 401 && times > 0) {
         console.log(`Request retry at ${times}`);
-        return await miaoApiCall(
-          path,
-          method,
-          body,
-          params,
-          apiName,
-          await getToken(true),
-          times - 1
-        );
+        return await miaoApiCall(path, {
+          body: body,
+          params: params,
+          apiName: apiName,
+          method: method,
+          errorHandleType: errorHandleType,
+          overwriteToken: await getToken(true),
+          times: times - 1,
+        });
       }
     }
     errorHandler(

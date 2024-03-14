@@ -5,18 +5,17 @@ interface ArticleListProps {
   limit: number;
   offset: number;
 }
+
 export async function getArticleList(params: ArticleListProps) {
   if (!params) return [];
-  const result = (await miaoApiCall(
-    "/articles",
-    "GET",
-    null,
-    {
+  const result = (await miaoApiCall("/articles", {
+    method: "GET",
+    params: {
       limit: params.limit.toString(),
       start: params.offset.toString(),
     },
-    "文列表"
-  )) as ArticleList[];
+    apiName: "文列表",
+  })) as ArticleList[];
   console.log(`fetch ${result.length} articles (ง'̀-'́)ง`);
   return result;
 }

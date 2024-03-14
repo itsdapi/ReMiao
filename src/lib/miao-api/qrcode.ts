@@ -7,11 +7,9 @@ export async function getQrCode() {
     foregroundColor: "000000",
     backgroundColor: "FFFFFF00",
   };
-  return (await miaoApiCall(
-    "/qrcode/user",
-    "GET",
-    null,
-    params,
-    "取二维码"
-  )) as QrCode;
+  return (await miaoApiCall("/qrcode/user", {
+    method: "GET",
+    params: params,
+    apiName: "取二维码",
+  })) as QrCode;
 }

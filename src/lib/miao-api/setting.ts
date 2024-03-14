@@ -7,16 +7,13 @@ export async function getSettings(
   overwriteToken?: string,
   errorHandleType?: ErrorDisplayType
 ) {
-  return (await miaoApiCall(
-    "/settings",
-    "POST",
-    querys,
-    undefined,
-    "取设置",
-    overwriteToken,
-    1,
-    errorHandleType
-  )) as Settings;
+  return (await miaoApiCall("/settings", {
+    method: "POST",
+    body: querys,
+    apiName: "取设置",
+    overwriteToken: overwriteToken,
+    errorHandleType: errorHandleType,
+  })) as Settings;
 }
 
 export async function getFileUrl(token: string) {

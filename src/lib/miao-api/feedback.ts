@@ -16,13 +16,11 @@ export async function postFeedback(options: {
   // 反馈内容
   content: string;
 }) {
-  const result = (await miaoApiCall(
-    "/feedbacks",
-    "POST",
-    options,
-    undefined,
-    "反馈"
-  )) as FeedbackReturn;
+  const result = (await miaoApiCall("/feedbacks", {
+    method: "POST",
+    body: options,
+    apiName: "反馈",
+  })) as FeedbackReturn;
   console.log("Feedback send complete", result);
   return result;
 }

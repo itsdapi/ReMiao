@@ -17,6 +17,14 @@
 使用需要建立`.env.development`和`.env.production`两个文件 里面需要填写的东西可以在`.env.template`中找到 注意每一项都要有
 不能缺
 
+
+
+### 安装依赖
+
+```shell
+yarn install
+```
+
 ### 开发
 
 ```shell
