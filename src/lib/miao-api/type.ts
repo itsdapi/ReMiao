@@ -64,12 +64,7 @@ export interface CatInfo {
 
 export interface SelectedPhoto extends CoverPhoto {}
 
-export interface SearchResult {
-  id: number;
-  name: string;
-  description: string;
-  haunt: string;
-  coverPhoto: CoverPhoto;
+export interface SearchResult extends CatList{
 }
 
 export interface UserInfo {

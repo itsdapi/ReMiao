@@ -30,7 +30,7 @@ export async function getCatDetail(id: string) {
 }
 
 export async function searchCat(term: string, limit = 20, offset = 0) {
-  if (!term) return [];
+  if (!term) return getCatList({ limit, offset });
   const result = (await miaoApiCall(`/cats/search`, {
     method: "GET",
     params: {

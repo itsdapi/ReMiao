@@ -24,7 +24,12 @@ export default defineAppConfig({
     "pages/none-tabs-pages/contact",
     "pages/none-tabs-pages/debug",
     "pages/none-tabs-pages/post",
-    "pages/management-pages/index",
+  ],
+  subPackages: [
+    {
+      root: "pages/management-pages",
+      pages: ["index", "cat/list", "cat/info"],
+    },
   ],
   tabBar: {
     list: routes,

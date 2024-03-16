@@ -17,7 +17,7 @@ export type AppRuntime = {
   fileUrl: string | null;
 };
 
-export type RequestType = "POST" | "GET" | "PUT";
+export type RequestType = "POST" | "GET" | "PUT" | "DELETE";
 
 export type ErrorMessages = {
   [statusCode: number]: string;
