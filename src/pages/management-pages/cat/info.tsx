@@ -38,7 +38,7 @@ export default function CatDetail(param: any) {
       <PaddingBlock />
       {/* TODO: Skeleton、catTags、catPhotos */}
       <MySuspense loading={isLoading} fallback={<CatDetailSkeleton />}>
-        {data && <CatForm catInfo={data.info}></CatForm>}
+        {id && data && <CatForm id={id} catInfo={data.info}></CatForm>}
       </MySuspense>
     </TopbarProvider>
   );

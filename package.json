@@ -41,6 +41,7 @@
   "author": "",
   "dependencies": {
     "@babel/runtime": "^7.21.5",
+    "@nutui/nutui-react-taro": "^2.4.1",
     "@reduxjs/toolkit": "^2.2.1",
     "@tailwindcss/typography": "^0.5.10",
     "@tarojs/components": "3.6.23",
@@ -71,7 +72,6 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^3.1.0",
     "swr": "^2.2.5",
-    "taro-ui": "^3.3.0",
     "use-debounce": "^10.0.0"
   },
   "devDependencies": {

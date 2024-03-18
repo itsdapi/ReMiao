@@ -3,7 +3,7 @@ import { useLaunch, navigateTo, useError } from "@tarojs/taro";
 import { Provider } from "react-redux";
 import { store } from "@/lib/redux/store";
 import "abortcontroller-polyfill/dist/abortcontroller-polyfill-only";
-import "taro-ui/dist/style/index.scss";
+import '@nutui/nutui-react-taro/dist/style.css'
 import "./app.css";
 
 function App({ children }: PropsWithChildren<any>) {

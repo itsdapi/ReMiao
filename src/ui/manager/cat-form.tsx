@@ -1,80 +1,135 @@
+import { updateCat } from "@/lib/miao-api/management";
 import { CatInfo } from "@/lib/miao-api/type";
-import { Picker } from "@tarojs/components";
-import { useState } from "react";
-import { AtForm, AtInput, AtButton, AtListItem, AtSwitch } from "taro-ui";
+import {
+  Form,
+  Button,
+  Input,
+  TextArea,
+  Picker,
+  Cell,
+  Switch,
+  Divider,
+} from "@nutui/nutui-react-taro";
+import Taro from "@tarojs/taro";
+import { mutate } from "swr";
 
-export function CatForm({ catInfo }: { catInfo: CatInfo }) {
-  const statusList = {
-    0: "失踪",
-    1: "正常",
-    2: "生病",
-    3: "住院",
-    4: "被领养",
-    5: "死亡",
-  };
-  const [catData, setCatData] = useState(catInfo);
+export function CatForm({ id, catInfo }: { id: string; catInfo: CatInfo }) {
+  const statusList = [
+    { value: "0", text: "失踪" },
+    { value: "1", text: "正常" },
+    { value: "2", text: "生病" },
+    { value: "3", text: "住院" },
+    { value: "4", text: "被领养" },
+    { value: "5", text: "死亡" },
+  ];
   return (
     <>
-      {/* AtForm不能管理表单数据 */}
-      <AtForm
-        onSubmit={() => {
-          console.log(catData);
-          // TODO: 提交表单
+      <Form
+        initialValues={{
+          name: catInfo.name,
+          description: catInfo.description,
+          haunt: catInfo.haunt,
+          status: [catInfo.status],
+          isNeuter: catInfo.isNeuter,
         }}
+        labelPosition={"right"}
+        onFinish={(values) => {
+          const cataData: CatInfo = {
+            name: values.name,
+            description: values.description,
+            haunt: values.haunt,
+            status: values.status[0],
+            isNeuter: values.isNeuter,
+            species: catInfo.species,
+          };
+          updateCat(id, cataData)
+            .then((res) => {
+              console.log("updateCat", res);
+              mutate(id);
+              Taro.navigateBack();
+            })
+            .catch((e) => {
+              alert(e);
+            });
+        }}
+        footer={
+          <>
+            <Button formType={"submit"} block type={"primary"}>
+              提交
+            </Button>
+          </>
+        }
       >
-        <AtInput
+        <Form.Item
+          required
+          label={"猫咪名字"}
           name={"name"}
-          title={"猫咪名字"}
-          type={"text"}
-          value={catData.name}
-          onChange={(e) => {
-            setCatData({ ...catData, name: `${e}` });
-          }}
-        />
-        <AtInput
+          initialValue={catInfo.name}
+        >
+          <Input
+            className={"nut-input-text"}
+            placeholder={"请输入猫咪名字"}
+            type={"text"}
+          />
+        </Form.Item>
+        <Form.Item
+          required
+          label={"猫咪描述"}
           name={"description"}
-          title={"猫咪描述"}
-          type={"text"}
-          value={catData.description}
-          onChange={(e) => {
-            setCatData({ ...catData, description: `${e}` });
-          }}
-        />
-        <AtInput
+          initialValue={catInfo.description}
+        >
+          <TextArea
+            className={"nut-input-text"}
+            placeholder={"请输入猫咪描述"}
+          />
+        </Form.Item>
+        <Form.Item
+          required
+          label={"猫咪出没地"}
           name={"haunt"}
-          title={"猫咪出没地"}
-          type={"text"}
-          value={catData.haunt}
-          onChange={(e) => {
-            setCatData({ ...catData, haunt: `${e}` });
-          }}
-        />
+          initialValue={catInfo.haunt}
+        >
+          <Input
+            className={"nut-input-text"}
+            placeholder={"请输入猫咪出没地"}
+            type={"text"}
+          />
+        </Form.Item>
         {/* 猫咪状态,0表示失踪,1表示正常,2表示生病,3表示住院,4表示被领养,5表示死亡 */}
-        {/* TODO:对齐 */}
-        <Picker
-          mode={"selector"}
-          range={Object.values(statusList)}
-          value={Number(catData.status)}
-          onChange={(e) => {
-            setCatData({ ...catData, status: `${e.detail.value}` });
+        <Form.Item
+          label={"猫咪状态"}
+          name={"status"}
+          trigger={"onConfirm"}
+          onClick={(_, ref: any) => {
+            ref.open();
           }}
         >
-          <AtListItem
-            title={"猫咪状态"}
-            extraText={statusList[catData.status]}
-          />
-        </Picker>
-        <AtSwitch
-          title={"是否绝育"}
-          checked={catData.isNeuter}
-          onChange={() => {
-            setCatData({ ...catData, isNeuter: !catData.isNeuter });
-          }}
-        />
-        <AtButton type={"primary"} formType={"submit"} className={"m-2"}>
-          提交
-        </AtButton>
-      </AtForm>
+          <Picker options={statusList}>
+            {(value: any) => {
+              return (
+                <Cell
+                  className={"nutui-cell--clickable p-0"}
+                  title={
+                    value.length
+                      ? statusList.filter((po) => po.value === value[0])[0]
+                          ?.text
+                      : "请选择"
+                  }
+                  align={"center"}
+                />
+              );
+            }}
+          </Picker>
+        </Form.Item>
+        <Form.Item
+          label={"是否绝育"}
+          name={"isNeuter"}
+          valuePropName={"checked"}
+        >
+          <Switch />
+        </Form.Item>
+      </Form>
+      <Divider />
     </>
   );
 }

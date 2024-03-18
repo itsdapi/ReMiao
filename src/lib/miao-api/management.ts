@@ -11,7 +11,7 @@ export async function newCat(catInfo: CatInfo) {
   return result;
 }
 
-export async function updateCat(catId: number, catInfo: CatInfo) {
+export async function updateCat(catId: string, catInfo: CatInfo) {
   const result = await miaoApiCall(`/manage/cat/${catId}`, {
     method: "PUT",
     body: catInfo,

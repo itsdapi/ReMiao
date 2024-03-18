@@ -12,7 +12,12 @@ export default defineConfig(async (merge, {}) => {
   const baseConfig: UserConfigExport = {
     projectName: "ReMiao",
     date: "2024-2-19",
-    designWidth: 750,
+    designWidth(input: any) {
+      if (input?.file?.replace(/\\+/g, "/").indexOf("@nutui") > -1) {
+        return 375;
+      }
+      return 750;
+    },
     deviceRatio: {
       640: 2.34 / 2,
       750: 1,
@@ -69,7 +74,6 @@ export default defineConfig(async (merge, {}) => {
       },
     },
     h5: {
-      esnextModules: ["taro-ui"],
       publicPath: "/",
       staticDirectory: "static",
       output: {
